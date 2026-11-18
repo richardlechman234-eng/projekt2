@@ -54,7 +54,7 @@ window.AUTO_MM = {
       price: 'od [doplniť] €'
     },
     {
-      id: 'vyfuk', name: 'Výfuk', anchor: null, normal: [0.2, 0, -1], view: [1.1, 0.3, -1.9],
+      id: 'vyfuk', name: 'Výfuk', anchor: null, normal: [1, 0, -0.25], view: [1.1, 0.3, -1.9],
       desc: 'Opravy a výmeny výfukového systému.',
       items: ['Výmena tlmičov výfuku', 'Opravy výfukového potrubia', 'Kontrola úniku spalín', '[doplniť]'],
       price: 'od [doplniť] €'

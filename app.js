@@ -318,7 +318,12 @@ loader.load('assets/car.glb', (gltf) => {
   const vy = anchorsLocal.hs_vyfuk;
   for (const s of SERVICES) {
     if (s.id === 'brzdy') s.local = bl ? bl.position.clone().add(new THREE.Vector3(0.23, 0.08, 0.1)) : new THREE.Vector3(1, 0.42, -1.25);
-    else if (s.id === 'vyfuk') s.local = vy ? new THREE.Vector3(Math.abs(vy.x), vy.y, vy.z) : new THREE.Vector3(0.77, 0.36, -2.36);
+    else if (s.id === 'vyfuk') {
+      // the exhaust itself faces backwards and is hidden in the services view, so the balloon
+      // sits on the visible rear-left corner of the bumper; the camera still flies to the exhaust
+      s.focus = vy ? new THREE.Vector3(Math.abs(vy.x), vy.y, vy.z) : new THREE.Vector3(0.77, 0.36, -2.36);
+      s.local = new THREE.Vector3(0.86, 0.5, s.focus.z + 0.18);
+    }
     else s.local = anchorsLocal[s.anchor]?.clone() ?? new THREE.Vector3(0, 0.6, 0);
     s.normalV = new THREE.Vector3(...s.normal).normalize();
   }
@@ -494,7 +499,7 @@ function frame() {
   lastCarZ = carZ;
 
   if (focused && focused.local) {
-    const a = car.localToWorld(tmp.copy(focused.local));
+    const a = car.localToWorld(tmp.copy(focused.focus ?? focused.local));
     tgtLook.copy(a);
     tgtPos.copy(a).add(v3(...focused.view));
   }
