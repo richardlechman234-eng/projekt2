@@ -2,56 +2,10 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
-/* ------------------------------------------------------------------
-   Služby: anchor = značka z Blendera (alebo výpočet), normal = smer,
-   z ktorého je bod viditeľný, view = kam sa postaví kamera pri detaile.
-   Súradnice v priestore auta: +Z = predok, +X = ľavý bok auta.
-------------------------------------------------------------------- */
-const SERVICES = [
-  {
-    id: 'pneuservis', name: 'Pneuservis', anchor: 'hs_pneuservis',
-    normal: [1, 0, 0.2], view: [1.9, 0.35, 0.55],
-    desc: 'Sezónne prezutie, vyváženie a oprava defektov.',
-    items: ['Prezutie letných / zimných pneumatík', 'Vyváženie kolies', 'Oprava defektu', '[doplniť: uskladnenie pneumatík?]'],
-    price: 'od [doplniť] €'
-  },
-  {
-    id: 'brzdy', name: 'Brzdy', anchor: null, normal: [1, 0, -0.1], view: [1.8, 0.3, -0.45],
-    desc: 'Kontrola a výmena brzdových dielov, aby ste zastavili vždy včas.',
-    items: ['Výmena brzdových platničiek', 'Výmena brzdových kotúčov', 'Výmena brzdovej kvapaliny', 'Kontrola brzdovej sústavy'],
-    price: 'od [doplniť] €'
-  },
-  {
-    id: 'motor', name: 'Motor a olej', anchor: 'hs_motor', normal: [0, 1, 0.3], view: [1.0, 1.7, 1.6],
-    desc: 'Pravidelný servis motora podľa predpisu výrobcu.',
-    items: ['Výmena oleja a filtrov', 'Servisná prehliadka', 'Výmena rozvodov', 'Opravy motora'],
-    price: 'od [doplniť] €'
-  },
-  {
-    id: 'svetla', name: 'Svetlá a elektrika', anchor: 'hs_svetla', normal: [0.4, 0.15, 1], view: [1.0, 0.25, 1.75],
-    desc: 'Osvetlenie, batéria a elektroinštalácia vozidla.',
-    items: ['Nastavenie svetlometov', 'Výmena žiaroviek', 'Kontrola a výmena autobatérie', 'Opravy elektroinštalácie'],
-    price: 'od [doplniť] €'
-  },
-  {
-    id: 'klimatizacia', name: 'Klimatizácia', anchor: 'hs_klimatizacia', normal: [0, 0.1, 1], view: [0.35, 0.3, 2.1],
-    desc: 'Plnenie a dezinfekcia klimatizácie pre čistý vzduch v kabíne.',
-    items: ['Plnenie klimatizácie', 'Dezinfekcia a čistenie', 'Výmena kabínového filtra', 'Kontrola tesnosti'],
-    price: 'od [doplniť] €'
-  },
-  {
-    id: 'diagnostika', name: 'Diagnostika', anchor: 'hs_karoseria', normal: [1, 0.1, 0], view: [2.3, 0.5, 0.3],
-    desc: 'Počítačová diagnostika porúch a vyčítanie chybových kódov.',
-    items: ['Diagnostika riadiacich jednotiek', 'Vyčítanie a mazanie chýb', 'Kontrola pred kúpou auta', '[doplniť]'],
-    price: 'od [doplniť] €'
-  },
-  {
-    id: 'vyfuk', name: 'Výfuk', anchor: null, normal: [0.2, 0, -1], view: [1.1, 0.3, -1.9],
-    desc: 'Opravy a výmeny výfukového systému.',
-    items: ['Výmena tlmičov výfuku', 'Opravy výfukového potrubia', 'Kontrola úniku spalín', '[doplniť]'],
-    price: 'od [doplniť] €'
-  }
-];
+/* Služby, ceny a hodiny sú v data.js (spoločné pre 3D balóny, cenník aj formulár).
+   anchor = značka z Blendera, normal = smer, z ktorého je bod viditeľný,
+   view = kam sa postaví kamera pri detaile. +Z = predok auta, +X = ľavý bok. */
+const SERVICES = window.AUTO_MM.services.map((s) => ({ ...s }));
 
 const $ = (id) => document.getElementById(id);
 const experience = $('experience');
@@ -95,6 +49,14 @@ function closeService() {
   chipsEl.querySelector(`[data-id="${id}"]`)?.focus({ preventScroll: true });
 }
 $('panel-close').addEventListener('click', closeService);
+
+// "Objednať túto službu": close the panel, preselect the service in the form, scroll to it
+$('panel-book').addEventListener('click', (e) => {
+  e.preventDefault();
+  const id = focused?.id;
+  closeService();
+  window.dispatchEvent(new CustomEvent('automm:book', { detail: { id } }));
+});
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeService(); setContact(false); }
 });
@@ -556,6 +518,7 @@ function frame() {
   intro.classList.toggle('gone', p > 0.2);
   const inServices = p > 0.86 && !focused;
   servicesUI.classList.toggle('show', inServices);
+  document.body.classList.toggle('stage-services', p > 0.86);
   const placed = [];
   for (const s of SERVICES) {
     if (!s.local) continue;
