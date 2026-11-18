@@ -223,7 +223,7 @@ loader.load('assets/car.glb', (gltf) => {
   $('loader').classList.add('done');
 }, (xhr) => {
   if (xhr.total) {
-    const pct = Math.round((xhr.loaded / xhr.total) * 100);
+    const pct = Math.min(100, Math.round((xhr.loaded / xhr.total) * 100));
     $('loader-fill').style.width = pct + '%';
     $('loader-text').textContent = `Načítavam 3D model… ${pct} %`;
   }
