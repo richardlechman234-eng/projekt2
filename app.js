@@ -347,7 +347,7 @@ const clamp01 = (t) => Math.min(1, Math.max(0, t));
 const seg = (p, a, b) => clamp01((p - a) / (b - a));
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
-let fitScale = 1, fitIntro = 1;
+let fitScale = 1, fitIntro = 1, portrait = 0;
 function cameraFromScroll(p, outPos, outLook) {
   const d = ease(seg(p, 0, 0.55));
   const o = ease(seg(p, 0.55, 0.9));
@@ -356,11 +356,12 @@ function cameraFromScroll(p, outPos, outLook) {
   const posA = v3(0, 0.85, 5.2).lerp(v3(0, 0.78, 6.2), d);
   const lookA = v3(0, 0.62, carZ);
   // B: orbit to a 3/4 front-left view for the services
-  const posB = v3(5.1, 2.05, DRIVE + 5.3);
-  const lookB = v3(0, 0.3, DRIVE + 0.25);
+  // on portrait phones look more from the front (the car is narrower on screen) and
+  // raise the car in the frame so it sits above the services list at the bottom
+  const posB = v3(5.1, 2.05, DRIVE + 5.3).lerp(v3(3.0, 2.4, DRIVE + 6.2), portrait);
+  const lookB = v3(0, 0.3 - 0.15 * portrait, DRIVE + 0.25);
   // portrait screens: the intro shows the car lower in the frame, under the title
   lookA.y += (fitIntro - 1) * 0.55;
-  lookB.z += (fitScale - 1) * 0.18;     // narrow screens: keep the front bumper in view
   outLook.copy(lookA).lerp(lookB, o);
   outPos.copy(posA).lerp(posB, o);
   // keep the car filling the frame on narrow (portrait) screens
@@ -474,6 +475,7 @@ function resize() {
   camera.updateProjectionMatrix();
   fitScale = Math.max(1, Math.pow(1.5 / camera.aspect, 0.82));
   fitIntro = Math.max(1, Math.pow(1.5 / camera.aspect, 0.42));
+  portrait = clamp01((1 - camera.aspect) / 0.5);          // 0 = landscape, 1 = tall phone
 }
 window.addEventListener('resize', resize);
 resize();
@@ -511,7 +513,9 @@ function frame() {
   // shift the picture so the focused part is not hidden behind the panel
   const desk = W > 760;
   const wantX = focused ? (desk ? (Math.min(400, W * 0.4) + 24) / 2 : 0) : 0;
-  const wantY = focused && !desk ? Math.min(H * 0.58, panel.offsetHeight || H * 0.5) / 2 : 0;
+  // phones: in the services view, centre the car in the space above the services list
+  const listShift = !desk && !focused ? (servicesUI.offsetHeight * 0.5 - 30) * seg(p, 0.55, 0.9) : 0;
+  const wantY = focused && !desk ? Math.min(H * 0.58, panel.offsetHeight || H * 0.5) / 2 : Math.max(0, listShift);
   shiftX += (wantX - shiftX) * k;
   shiftY += (wantY - shiftY) * k;
   if (Math.abs(shiftX) > 0.5 || Math.abs(shiftY) > 0.5) camera.setViewOffset(W, H, shiftX, shiftY, W, H);
@@ -534,8 +538,10 @@ function frame() {
     const show = inServices && facing && world.z < 1;
     s.el.classList.toggle('hidden', !show);
     s.el.tabIndex = show ? 0 : -1;
-    s.sx = (world.x * 0.5 + 0.5) * W - 22;
-    s.sy = (-world.y * 0.5 + 0.5) * H - 22;
+    // keep every balloon fully on screen (below the top bar)
+    const bw = W <= 640 ? 44 : (s.el.offsetWidth || 44);
+    s.sx = Math.min(Math.max((world.x * 0.5 + 0.5) * W - 22, 4), W - bw - 4);
+    s.sy = Math.min(Math.max((-world.y * 0.5 + 0.5) * H - 22, 76), H - 48);
     if (show) placed.push(s);
   }
   // keep the balloons from covering each other: push overlapping ones down
