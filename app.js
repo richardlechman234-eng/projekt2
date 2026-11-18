@@ -393,6 +393,7 @@ function cameraFromScroll(p, outPos, outLook) {
   const lookB = v3(0, 0.3, DRIVE + 0.25);
   // portrait screens: the intro shows the car lower in the frame, under the title
   lookA.y += (fitIntro - 1) * 0.55;
+  lookB.z += (fitScale - 1) * 0.18;     // narrow screens: keep the front bumper in view
   outLook.copy(lookA).lerp(lookB, o);
   outPos.copy(posA).lerp(posB, o);
   // keep the car filling the frame on narrow (portrait) screens
@@ -460,6 +461,43 @@ window.addEventListener('scroll', () => {
 
 $('go-services').addEventListener('click', () => goTo('services'));
 
+/* ---------------- title flies into the top-left corner ---------------- */
+const heroTitle = $('hero-title');
+const brand = $('brand');
+const brandText = $('brand-text');
+const fadeEls = [...document.querySelectorAll('.intro .fade')];
+let titleMove = null;
+function measureTitle() {
+  heroTitle.style.transform = 'none';
+  const a = heroTitle.getBoundingClientRect();
+  const b = brandText.getBoundingClientRect();
+  // fit by text height so the glyphs land on the small label
+  const s = b.height / a.height;
+  titleMove = { dx: b.left - a.left, dy: b.top - a.top - (a.height * s - b.height) / 2, s };
+}
+document.fonts?.ready.then(measureTitle);
+window.addEventListener('resize', measureTitle);
+measureTitle();
+
+brand.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+function updateTitle(p) {
+  const t = ease(seg(p, 0.04, 0.62));
+  if (titleMove) {
+    const sc = 1 + (titleMove.s - 1) * t;
+    heroTitle.style.transform = `translate(${titleMove.dx * t}px, ${titleMove.dy * t}px) scale(${sc})`;
+  }
+  const docked = t > 0.985;
+  heroTitle.classList.toggle('hidden', docked);
+  brand.classList.toggle('show', docked);
+  brand.tabIndex = docked ? 0 : -1;
+  const fade = String(1 - seg(p, 0.03, 0.2));
+  for (const el of fadeEls) el.style.opacity = fade;
+}
+
 /* ---------------- resize ---------------- */
 let W = 0, H = 0;
 function resize() {
@@ -467,7 +505,7 @@ function resize() {
   renderer.setSize(W, H, false);
   camera.aspect = W / H;
   camera.updateProjectionMatrix();
-  fitScale = Math.max(1, Math.pow(1.5 / camera.aspect, 0.72));
+  fitScale = Math.max(1, Math.pow(1.5 / camera.aspect, 0.82));
   fitIntro = Math.max(1, Math.pow(1.5 / camera.aspect, 0.42));
 }
 window.addEventListener('resize', resize);
@@ -514,7 +552,7 @@ function frame() {
   camera.updateMatrixWorld();
 
   // UI overlays
-  intro.style.opacity = String(1 - seg(p, 0.03, 0.2));
+  updateTitle(p);
   intro.classList.toggle('gone', p > 0.2);
   const inServices = p > 0.86 && !focused;
   servicesUI.classList.toggle('show', inServices);
