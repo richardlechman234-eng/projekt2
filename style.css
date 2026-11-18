@@ -77,7 +77,7 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: -0.02em; line-height: 
 @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 
 /* ---------- 3D experience ---------- */
-.experience { position: relative; height: 340vh; }
+.experience { position: relative; height: 100vh; height: 100svh; }
 .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--dark); }
 #scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
 
@@ -112,10 +112,12 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: -0.02em; line-height: 
 .eyebrow { margin: 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--white); }
 .rating { margin: 20px 0 0; font-weight: 600; font-size: 15px; color: var(--white); }
 .scroll-hint {
-  position: absolute; bottom: 28px; margin: 0; display: grid; justify-items: center; gap: 8px;
-  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--white);
+  position: absolute; bottom: 20px; margin: 0; display: grid; justify-items: center; gap: 8px;
+  padding: 8px 16px; background: none; border: 0; cursor: pointer; pointer-events: auto;
+  font: 600 12px var(--font); letter-spacing: .14em; text-transform: uppercase; color: var(--white);
   text-shadow: 0 1px 6px rgba(10,2,2,.9);
 }
+.intro.gone .scroll-hint { pointer-events: none; visibility: hidden; }
 .scroll-hint span { width: 22px; height: 36px; border: 2px solid var(--white); border-radius: 12px; position: relative; }
 .scroll-hint span::after {
   content: ""; position: absolute; left: 50%; top: 7px; width: 4px; height: 8px; margin-left: -2px;

@@ -401,10 +401,64 @@ function cameraFromScroll(p, outPos, outLook) {
   return carZ;
 }
 
-function scrollProgress() {
-  const total = experience.offsetHeight - window.innerHeight;
-  return clamp01(-experience.getBoundingClientRect().top / total);
+/* ---------------- one-gesture transition: intro <-> services ----------------
+   One scroll / swipe / key press plays the whole drive automatically.
+   Normal page scrolling only starts once the services view is reached. */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DURATION = reduceMotion ? 700 : 2600;
+let stageState = window.scrollY > 10 ? 'services' : 'intro';
+let progress = stageState === 'services' ? 1 : 0;
+let anim = null;
+
+function goTo(state) {
+  if (anim || state === stageState || focused) return;
+  stageState = state;
+  anim = { from: progress, to: state === 'services' ? 1 : 0, start: performance.now() };
 }
+function stepAnim(now) {
+  if (!anim) return;
+  const t = clamp01((now - anim.start) / DURATION);
+  const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;   // ease in-out
+  progress = anim.from + (anim.to - anim.from) * e;
+  if (t >= 1) anim = null;
+}
+const atTop = () => window.scrollY <= 2;
+
+window.addEventListener('wheel', (e) => {
+  if (focused) return;
+  if (anim || stageState === 'intro') e.preventDefault();
+  if (anim) return;
+  if (stageState === 'intro' && e.deltaY > 0) goTo('services');
+  else if (stageState === 'services' && e.deltaY < 0 && atTop()) { e.preventDefault(); goTo('intro'); }
+}, { passive: false });
+
+let touchY = null;
+window.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+window.addEventListener('touchmove', (e) => {
+  if (focused || touchY === null) return;
+  const dy = touchY - e.touches[0].clientY;          // > 0: finger moves up = scroll down
+  if (anim || stageState === 'intro') e.preventDefault();
+  if (anim) return;
+  if (stageState === 'intro' && dy > 12) { goTo('services'); touchY = null; }
+  else if (stageState === 'services' && dy < -12 && atTop()) { e.preventDefault(); goTo('intro'); touchY = null; }
+}, { passive: false });
+
+window.addEventListener('keydown', (e) => {
+  if (focused || e.target.closest('input, textarea, [contenteditable]')) return;
+  const down = ['ArrowDown', 'PageDown', ' '].includes(e.key);
+  const up = ['ArrowUp', 'PageUp'].includes(e.key);
+  if (anim && (down || up)) { e.preventDefault(); return; }
+  if (stageState === 'intro' && down) { e.preventDefault(); goTo('services'); }
+  else if (stageState === 'services' && up && atTop()) { e.preventDefault(); goTo('intro'); }
+});
+
+// dragging the scrollbar past the stage: jump straight to the services view
+window.addEventListener('scroll', () => {
+  if (stageState === 'intro' && !anim && window.scrollY > 40) { stageState = 'services'; progress = 1; }
+}, { passive: true });
+
+$('go-services').addEventListener('click', () => goTo('services'));
 
 /* ---------------- resize ---------------- */
 let W = 0, H = 0;
@@ -428,7 +482,8 @@ const clock = new THREE.Clock();
 
 function frame() {
   const dt = Math.min(clock.getDelta(), 0.05);
-  const p = scrollProgress();
+  stepAnim(performance.now());
+  const p = progress;
   const k = 1 - Math.exp(-dt * 5);
 
   const targetCarZ = cameraFromScroll(p, tgtPos, tgtLook);
@@ -460,6 +515,7 @@ function frame() {
 
   // UI overlays
   intro.style.opacity = String(1 - seg(p, 0.03, 0.2));
+  intro.classList.toggle('gone', p > 0.2);
   const inServices = p > 0.86 && !focused;
   servicesUI.classList.toggle('show', inServices);
   const placed = [];
