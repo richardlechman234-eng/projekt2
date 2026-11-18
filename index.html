@@ -3,13 +3,127 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projekt2</title>
+  <title>AUTO MM Servis – autoservis Podunajské Biskupice</title>
+  <meta name="description" content="AUTO MM Servis – oprava a údržba automobilov, Pasienková 66, Bratislava – Podunajské Biskupice. Tel. 0917 973 170.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
-  <main>
-    <h1>Projekt2</h1>
-    <p>Stránka beží na GitHub Pages. Tento obsah môžeš ľubovoľne upraviť.</p>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="AUTO MM Servis – na začiatok">
+      <span class="brand-mark" aria-hidden="true">MM</span>
+      <span class="brand-name">AUTO MM Servis</span>
+    </a>
+    <div class="contact-wrap">
+      <button class="btn btn-accent" id="contact-btn" aria-expanded="false" aria-controls="contact-pop">Kontakt</button>
+      <div class="contact-pop" id="contact-pop" role="dialog" aria-label="Kontaktné údaje" hidden>
+        <dl>
+          <div><dt>Adresa</dt><dd>Pasienková 66<br>821 06 Bratislava – Podunajské Biskupice</dd></div>
+          <div><dt>Telefón</dt><dd><a href="tel:+421917973170">0917 973 170</a></dd></div>
+          <div><dt>Otváracie hodiny</dt><dd>Po – Pi: [doplniť]<br>So – Ne: [doplniť]</dd></div>
+        </dl>
+        <div class="pop-actions">
+          <a class="btn btn-accent" href="tel:+421917973170">Zavolať</a>
+          <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=AUTO+MM+Servis+Pasienkov%C3%A1+66+Bratislava" target="_blank" rel="noopener">Navigovať</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 3D zážitok: auto na celú obrazovku, scrollovaním ide dopredu -->
+    <section class="experience" id="experience" aria-label="3D auto a služby">
+      <div class="stage">
+        <canvas id="scene" aria-hidden="true"></canvas>
+
+        <div class="loader" id="loader" role="status">
+          <span class="loader-bar"><span id="loader-fill"></span></span>
+          <span id="loader-text">Načítavam 3D model…</span>
+        </div>
+
+        <div class="intro" id="intro">
+          <p class="eyebrow">Autoservis · Podunajské Biskupice</p>
+          <h1>AUTO MM Servis</h1>
+          <p class="rating"><span aria-hidden="true">★</span> 4,6 z 5 · 20 recenzií na Google</p>
+          <p class="scroll-hint" aria-hidden="true"><span></span>Scrollujte</p>
+        </div>
+
+        <div class="hotspots" id="hotspots"></div>
+
+        <div class="services-ui" id="services-ui">
+          <h2>Naše služby</h2>
+          <p>Kliknite na časť auta alebo vyberte službu</p>
+          <div class="chips" id="chips" role="list"></div>
+        </div>
+
+        <aside class="service-panel" id="panel" aria-live="polite" hidden>
+          <button class="panel-close" id="panel-close" aria-label="Zavrieť a vrátiť sa k autu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+          <p class="panel-kicker">Služba</p>
+          <h3 id="panel-title"></h3>
+          <p id="panel-desc"></p>
+          <ul id="panel-list"></ul>
+          <p class="panel-price"><span>Cena</span><strong id="panel-price"></strong></p>
+          <a class="btn btn-accent btn-block" href="tel:+421917973170">Objednať sa: 0917 973 170</a>
+        </aside>
+
+        <p class="nogl" id="nogl" hidden>Váš prehliadač nepodporuje 3D zobrazenie. Služby nájdete nižšie.</p>
+      </div>
+    </section>
+
+    <section class="section" id="o-nas" aria-labelledby="onas-title">
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow">O nás</p>
+          <h2 id="onas-title">Servis na Pasienkovej ulici</h2>
+          <p class="lead">[Doplniť: kto servis vedie, ako dlho funguje, na aké značky sa špecializuje.]</p>
+          <ul class="checks">
+            <li>[Výhoda 1, napr. férové ceny]</li>
+            <li>[Výhoda 2, napr. rýchle termíny]</li>
+            <li>[Výhoda 3]</li>
+          </ul>
+        </div>
+        <div class="photo-ph" role="img" aria-label="Miesto pre fotku prevádzky">Fotka prevádzky</div>
+      </div>
+    </section>
+
+    <section class="section" id="recenzie" aria-labelledby="rec-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Recenzie</p>
+            <h2 id="rec-title">Čo hovoria zákazníci</h2>
+          </div>
+          <p class="rating-big"><strong>4,6</strong><span aria-hidden="true">★★★★★</span><span>20 recenzií na Google</span></p>
+        </div>
+        <div class="reviews">
+          <figure class="review"><span class="stars" aria-label="5 z 5 hviezdičiek">★★★★★</span><blockquote>[Citát z recenzie – vybrať so súhlasom autora]</blockquote><figcaption>[Meno zákazníka]</figcaption></figure>
+          <figure class="review"><span class="stars" aria-label="5 z 5 hviezdičiek">★★★★★</span><blockquote>[Citát z recenzie – vybrať so súhlasom autora]</blockquote><figcaption>[Meno zákazníka]</figcaption></figure>
+          <figure class="review"><span class="stars" aria-label="5 z 5 hviezdičiek">★★★★★</span><blockquote>[Citát z recenzie – vybrať so súhlasom autora]</blockquote><figcaption>[Meno zákazníka]</figcaption></figure>
+        </div>
+        <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=AUTO+MM+Servis+Pasienkov%C3%A1+66+Bratislava" target="_blank" rel="noopener">Všetky recenzie na Google</a>
+      </div>
+    </section>
   </main>
+
+  <footer class="footer">
+    <div class="wrap footer-row">
+      <span>© 2026 AUTO MM Servis · Pasienková 66, Bratislava · <a href="tel:+421917973170">0917 973 170</a></span>
+      <span class="credit">3D model „Audi RS5“ od <a href="https://sketchfab.com/WillisChiejina" target="_blank" rel="noopener">WillisChiejina</a> (<a href="https://sketchfab.com/3d-models/audi-rs5-75d636ab26b1423ca61ffd0fd758fd0a" target="_blank" rel="noopener">Sketchfab</a>), licencia <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>, upravené (odstránené logá, zjednodušené).</span>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
