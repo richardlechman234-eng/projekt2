@@ -189,8 +189,15 @@ function buildGarage() {
   for (const x of [-bw / 2, bw / 2]) add(new THREE.PlaneGeometry(0.14, bl), blueLine, x, 0.005, bayZ, -Math.PI / 2);
 
   // walls + ceiling
-  const wallTex = canvasTex(256, 256, (c, w, h) => speckle(c, w, h, '#1d1515', 0.05, 3000), [6, 2]);
-  const wall = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.92 });
+  // light grey painted walls (#D6D4D4) with a little texture so they don't look flat
+  const wallTex = canvasTex(256, 256, (c, w, h) => {
+    c.fillStyle = '#d6d4d4'; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 2500; i++) {
+      c.fillStyle = `rgba(60,50,50,${Math.random() * 0.06})`;
+      c.fillRect(Math.random() * w, Math.random() * h, 1 + Math.random() * 2, 1 + Math.random() * 2);
+    }
+  }, [6, 2]);
+  const wall = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.9 });
   add(new THREE.PlaneGeometry(GW, GH), wall, 0, GH / 2, GZ - GD / 2);                      // back
   add(new THREE.PlaneGeometry(GW, GH), wall, 0, GH / 2, GZ + GD / 2, 0, Math.PI);          // front
   add(new THREE.PlaneGeometry(GD, GH), wall, -GW / 2, GH / 2, GZ, 0, Math.PI / 2);         // left
@@ -220,7 +227,7 @@ function buildGarage() {
   }
 
   // pillars along the side walls
-  const pillar = new THREE.MeshStandardMaterial({ color: '#160d0d', roughness: 0.8 });
+  const pillar = new THREE.MeshStandardMaterial({ color: '#bdbaba', roughness: 0.85 });
   for (const z of [-14, -6, 2, 10, 18]) for (const x of [-GW / 2 + 0.3, GW / 2 - 0.3]) add(new THREE.BoxGeometry(0.6, GH, 0.6), pillar, x, GH / 2, z);
 
   // LED strip lights (HDR white so the car paint reflects them)
@@ -229,9 +236,9 @@ function buildGarage() {
 
   // blue tool cabinets on the left wall
   const cabTex = canvasTex(256, 128, (c, w, h) => {
-    c.fillStyle = BLUE; c.fillRect(0, 0, w, h);
-    for (let i = 1; i < 5; i++) { c.fillStyle = 'rgba(0,0,0,0.35)'; c.fillRect(0, (h / 5) * i - 2, w, 3); }
-    c.fillStyle = 'rgba(255,255,255,0.75)';
+    c.fillStyle = '#0c2a78'; c.fillRect(0, 0, w, h);          // darker shade of the brand blue
+    for (let i = 1; i < 5; i++) { c.fillStyle = 'rgba(0,0,0,0.4)'; c.fillRect(0, (h / 5) * i - 2, w, 3); }
+    c.fillStyle = 'rgba(255,255,255,0.7)';
     for (let i = 0; i < 5; i++) c.fillRect(w / 2 - 30, (h / 5) * i + h / 10 - 2, 60, 4);
   });
   const cab = new THREE.MeshStandardMaterial({ map: cabTex, metalness: 0.4, roughness: 0.4 });
@@ -262,7 +269,7 @@ const garage = buildGarage();
 {
   const envScene = new THREE.Scene();
   envScene.background = new THREE.Color(DARK);
-  envScene.add(new THREE.AmbientLight('#ffffff', 3.5));
+  envScene.add(new THREE.AmbientLight('#ffffff', 1.6));
   garage.position.y = -1.1;                       // capture from roughly car height
   envScene.add(garage);
   scene.environment = pmrem.fromScene(envScene, 0.02).texture;
@@ -312,14 +319,35 @@ const loader = new GLTFLoader().setDRACOLoader(draco);
 loader.load('assets/car.glb', (gltf) => {
   const model = gltf.scene;
   car.add(model);
-  // blue, slightly glossy paint with a clear coat
-  const paint = new THREE.MeshPhysicalMaterial({
-    color: BLUE, metalness: 0.45, roughness: 0.3, clearcoat: 0.65, clearcoatRoughness: 0.12
-  });
+  // blue metallic paint: metal base with fine flakes + smooth clear coat on top
+  const flakes = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 256;
+    const g = c.getContext('2d');
+    const img = g.createImageData(256, 256);
+    for (let i = 0; i < img.data.length; i += 4) {
+      img.data[i] = 128 + (Math.random() - 0.5) * 110;
+      img.data[i + 1] = 128 + (Math.random() - 0.5) * 110;
+      img.data[i + 2] = 255;
+      img.data[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    const t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(24, 24);
+    return t;
+  })();
+  const paintProps = {
+    color: BLUE, metalness: 0.75, roughness: 0.33, envMapIntensity: 2.2,
+    clearcoat: 1.0, clearcoatRoughness: 0.06
+  };
+  const paint = new THREE.MeshPhysicalMaterial(paintProps);
+  const paintFlakes = new THREE.MeshPhysicalMaterial({ ...paintProps, normalMap: flakes, normalScale: new THREE.Vector2(0.35, 0.35) });
   model.traverse((o) => {
     if (o.isMesh) {
-      if (Array.isArray(o.material)) o.material = o.material.map((m) => (m.name === 'Paint' ? paint : m));
-      else if (o.material.name === 'Paint') o.material = paint;
+      const mat = o.geometry.attributes.uv ? paintFlakes : paint;   // flakes need UVs
+      if (Array.isArray(o.material)) o.material = o.material.map((m) => (m.name === 'Paint' ? mat : m));
+      else if (o.material.name === 'Paint') o.material = mat;
     }
     if (o.name.startsWith('Wheel_')) wheels.push({ obj: o, base: o.rotation.x });
     if (o.name.startsWith('hs_')) anchorsLocal[o.name] = o.position.clone();
