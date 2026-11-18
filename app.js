@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 /* ------------------------------------------------------------------
    Služby: anchor = značka z Blendera (alebo výpočet), normal = smer,
@@ -136,44 +135,149 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-const BG = new THREE.Color('#0c0d0f');
+const DARK = '#0a0202';
+const BLUE = '#1441b5';
 const scene = new THREE.Scene();
-scene.background = BG;
-scene.fog = new THREE.Fog(BG, 9, 26);
-const pmrem = new THREE.PMREMGenerator(renderer);
-scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-scene.environmentIntensity = 0.9;
+scene.background = new THREE.Color(DARK);
+scene.fog = new THREE.Fog(DARK, 24, 50);
 
-const key = new THREE.DirectionalLight('#ffffff', 2.2);
-key.position.set(3, 6, 4);
-scene.add(key);
-const rim = new THREE.DirectionalLight('#ffb27a', 1.2);
-rim.position.set(-5, 2, -6);
-scene.add(rim);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 120);
 
-const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-
-/* ground: dark floor with a faint grid so the drive is visible */
-function gridTexture() {
+/* ---------------- garage ---------------- */
+function canvasTex(w, h, draw, repeat = [1, 1]) {
   const c = document.createElement('canvas');
-  c.width = c.height = 256;
-  const g = c.getContext('2d');
-  g.fillStyle = '#101114'; g.fillRect(0, 0, 256, 256);
-  g.strokeStyle = 'rgba(255,255,255,0.07)'; g.lineWidth = 2;
-  g.strokeRect(0, 0, 256, 256);
+  c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  t.repeat.set(40, 40);
+  t.repeat.set(repeat[0], repeat[1]);
   t.anisotropy = 8;
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(80, 80),
-  new THREE.MeshStandardMaterial({ map: gridTexture(), roughness: 0.85, metalness: 0 })
-);
-ground.rotation.x = -Math.PI / 2;
-scene.add(ground);
+function speckle(g, w, h, base, alpha, count) {
+  g.fillStyle = base; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < count; i++) {
+    g.fillStyle = `rgba(255,255,255,${Math.random() * alpha})`;
+    g.fillRect(Math.random() * w, Math.random() * h, 1 + Math.random() * 2, 1 + Math.random() * 2);
+  }
+}
+
+const GW = 28, GD = 44, GH = 7, GZ = 4;          // garage width, depth, height, centre z
+function buildGarage() {
+  const g = new THREE.Group();
+  const add = (geo, mat, x, y, z, rx = 0, ry = 0) => {
+    const m = new THREE.Mesh(geo, mat);
+    m.position.set(x, y, z); m.rotation.set(rx, ry, 0);
+    g.add(m); return m;
+  };
+
+  // polished concrete floor with 4 m slab seams
+  const floorTex = canvasTex(512, 512, (c, w, h) => {
+    speckle(c, w, h, '#2b2525', 0.06, 9000);
+    c.strokeStyle = 'rgba(0,0,0,0.55)'; c.lineWidth = 3; c.strokeRect(0, 0, w, h);
+  }, [GW / 4, GD / 4]);
+  add(new THREE.PlaneGeometry(GW, GD), new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.55, metalness: 0.05 }), 0, 0, GZ, -Math.PI / 2);
+
+  // floor markings: white drive lanes + blue service bay
+  const white = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.75 });
+  const blueLine = new THREE.MeshBasicMaterial({ color: BLUE });
+  for (const x of [-1.75, 1.75]) add(new THREE.PlaneGeometry(0.1, 20), white, x, 0.004, 2, -Math.PI / 2);
+  const bayZ = 2.6, bw = 3.0, bl = 6.0;
+  add(new THREE.PlaneGeometry(bw, 0.14), blueLine, 0, 0.005, bayZ + bl / 2, -Math.PI / 2);
+  add(new THREE.PlaneGeometry(bw, 0.14), blueLine, 0, 0.005, bayZ - bl / 2, -Math.PI / 2);
+  for (const x of [-bw / 2, bw / 2]) add(new THREE.PlaneGeometry(0.14, bl), blueLine, x, 0.005, bayZ, -Math.PI / 2);
+
+  // walls + ceiling
+  const wallTex = canvasTex(256, 256, (c, w, h) => speckle(c, w, h, '#1d1515', 0.05, 3000), [6, 2]);
+  const wall = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.92 });
+  add(new THREE.PlaneGeometry(GW, GH), wall, 0, GH / 2, GZ - GD / 2);                      // back
+  add(new THREE.PlaneGeometry(GW, GH), wall, 0, GH / 2, GZ + GD / 2, 0, Math.PI);          // front
+  add(new THREE.PlaneGeometry(GD, GH), wall, -GW / 2, GH / 2, GZ, 0, Math.PI / 2);         // left
+  add(new THREE.PlaneGeometry(GD, GH), wall, GW / 2, GH / 2, GZ, 0, -Math.PI / 2);         // right
+  add(new THREE.PlaneGeometry(GW, GD), new THREE.MeshStandardMaterial({ color: '#0d0606', roughness: 1 }), 0, GH, GZ, Math.PI / 2);
+
+  // blue band around the walls
+  const band = new THREE.MeshStandardMaterial({ color: BLUE, roughness: 0.55, emissive: BLUE, emissiveIntensity: 0.25 });
+  add(new THREE.PlaneGeometry(GW, 0.7), band, 0, 1.25, GZ - GD / 2 + 0.01);
+  add(new THREE.PlaneGeometry(GW, 0.7), band, 0, 1.25, GZ + GD / 2 - 0.01, 0, Math.PI);
+  add(new THREE.PlaneGeometry(GD, 0.7), band, -GW / 2 + 0.01, 1.25, GZ, 0, Math.PI / 2);
+  add(new THREE.PlaneGeometry(GD, 0.7), band, GW / 2 - 0.01, 1.25, GZ, 0, -Math.PI / 2);
+
+  // roller doors on back and front wall
+  const doorTex = canvasTex(64, 256, (c, w, h) => {
+    c.fillStyle = '#4a4547'; c.fillRect(0, 0, w, h);
+    for (let y = 0; y < h; y += 16) { c.fillStyle = 'rgba(0,0,0,0.45)'; c.fillRect(0, y, w, 3); c.fillStyle = 'rgba(255,255,255,0.12)'; c.fillRect(0, y + 3, w, 2); }
+  });
+  const door = new THREE.MeshStandardMaterial({ map: doorTex, metalness: 0.55, roughness: 0.45 });
+  const frame = new THREE.MeshStandardMaterial({ color: '#2a2224', roughness: 0.6 });
+  for (const x of [-8.5, 0, 8.5]) {
+    for (const [z, ry] of [[GZ - GD / 2 + 0.02, 0], [GZ + GD / 2 - 0.02, Math.PI]]) {
+      add(new THREE.PlaneGeometry(4.6, 4.3), door, x, 2.15, z, 0, ry);
+      add(new THREE.BoxGeometry(5.0, 0.3, 0.2), frame, x, 4.45, z);
+      for (const dx of [-2.45, 2.45]) add(new THREE.BoxGeometry(0.2, 4.6, 0.2), frame, x + dx, 2.3, z);
+    }
+  }
+
+  // pillars along the side walls
+  const pillar = new THREE.MeshStandardMaterial({ color: '#160d0d', roughness: 0.8 });
+  for (const z of [-14, -6, 2, 10, 18]) for (const x of [-GW / 2 + 0.3, GW / 2 - 0.3]) add(new THREE.BoxGeometry(0.6, GH, 0.6), pillar, x, GH / 2, z);
+
+  // LED strip lights (HDR white so the car paint reflects them)
+  const led = new THREE.MeshBasicMaterial({ color: new THREE.Color(6, 6, 6) });
+  for (const x of [-7.5, -2.5, 2.5, 7.5]) for (const z of [-14, -6, 2, 10, 18]) add(new THREE.BoxGeometry(0.14, 0.05, 5), led, x, GH - 0.03, z);
+
+  // blue tool cabinets on the left wall
+  const cabTex = canvasTex(256, 128, (c, w, h) => {
+    c.fillStyle = BLUE; c.fillRect(0, 0, w, h);
+    for (let i = 1; i < 5; i++) { c.fillStyle = 'rgba(0,0,0,0.35)'; c.fillRect(0, (h / 5) * i - 2, w, 3); }
+    c.fillStyle = 'rgba(255,255,255,0.75)';
+    for (let i = 0; i < 5; i++) c.fillRect(w / 2 - 30, (h / 5) * i + h / 10 - 2, 60, 4);
+  });
+  const cab = new THREE.MeshStandardMaterial({ map: cabTex, metalness: 0.4, roughness: 0.4 });
+  const top = new THREE.MeshStandardMaterial({ color: '#2b2626', metalness: 0.6, roughness: 0.35 });
+  for (let z = -11; z <= 9; z += 2.2) {
+    add(new THREE.BoxGeometry(0.7, 1.05, 2.0), cab, -GW / 2 + 0.75, 0.525, z);
+    add(new THREE.BoxGeometry(0.76, 0.05, 2.06), top, -GW / 2 + 0.75, 1.075, z);
+  }
+
+  // stacked tyres on the right wall
+  const tyre = new THREE.MeshStandardMaterial({ color: '#111010', roughness: 0.85 });
+  const tyreGeo = new THREE.TorusGeometry(0.33, 0.13, 12, 28);
+  for (const z of [-12, -10.9, -9.8, 12, 13.1]) for (let i = 0; i < 4; i++) add(tyreGeo, tyre, GW / 2 - 0.8, 0.13 + i * 0.27, z, Math.PI / 2);
+
+  // painted name on the left wall
+  const nameTex = canvasTex(1024, 160, (c, w, h) => {
+    c.fillStyle = '#ffffff'; c.font = '700 120px "Space Grotesk", Arial, sans-serif';
+    c.textBaseline = 'middle'; c.fillText('AUTO MM SERVIS', 10, h / 2);
+  });
+  nameTex.wrapS = nameTex.wrapT = THREE.ClampToEdgeWrapping;
+  add(new THREE.PlaneGeometry(10, 1.56), new THREE.MeshBasicMaterial({ map: nameTex, transparent: true, opacity: 0.9 }), -GW / 2 + 0.02, 4.4, 0, 0, Math.PI / 2);
+  return g;
+}
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+const garage = buildGarage();
+// reflections: render the lit garage into an environment map (car paint reflects the LED strips)
+{
+  const envScene = new THREE.Scene();
+  envScene.background = new THREE.Color(DARK);
+  envScene.add(new THREE.AmbientLight('#ffffff', 3.5));
+  garage.position.y = -1.1;                       // capture from roughly car height
+  envScene.add(garage);
+  scene.environment = pmrem.fromScene(envScene, 0.02).texture;
+  garage.position.y = 0;
+}
+scene.add(garage);
+scene.environmentIntensity = 1.0;
+
+scene.add(new THREE.HemisphereLight('#ffffff', DARK, 0.9));
+const key = new THREE.DirectionalLight('#ffffff', 1.4);
+key.position.set(2, 7, 4);
+scene.add(key);
+const fill = new THREE.DirectionalLight('#dfe6ff', 0.7);
+fill.position.set(-5, 3, -4);
+scene.add(fill);
 
 /* soft contact shadow under the car */
 function shadowTexture() {
@@ -208,7 +312,15 @@ const loader = new GLTFLoader().setDRACOLoader(draco);
 loader.load('assets/car.glb', (gltf) => {
   const model = gltf.scene;
   car.add(model);
+  // blue, slightly glossy paint with a clear coat
+  const paint = new THREE.MeshPhysicalMaterial({
+    color: BLUE, metalness: 0.45, roughness: 0.3, clearcoat: 0.65, clearcoatRoughness: 0.12
+  });
   model.traverse((o) => {
+    if (o.isMesh) {
+      if (Array.isArray(o.material)) o.material = o.material.map((m) => (m.name === 'Paint' ? paint : m));
+      else if (o.material.name === 'Paint') o.material = paint;
+    }
     if (o.name.startsWith('Wheel_')) wheels.push({ obj: o, base: o.rotation.x });
     if (o.name.startsWith('hs_')) anchorsLocal[o.name] = o.position.clone();
   });
@@ -228,7 +340,9 @@ loader.load('assets/car.glb', (gltf) => {
     $('loader-text').textContent = `Načítavam 3D model… ${pct} %`;
   }
 }, () => {
-  $('loader-text').textContent = 'Model sa nepodarilo načítať.';
+  const t = $('loader-text');
+  if (t) t.textContent = 'Model sa nepodarilo načítať. Služby nájdete v zozname nižšie.';
+  servicesUI.classList.add('show');
 });
 
 /* ---------------- scroll timeline ---------------- */
@@ -238,7 +352,7 @@ const clamp01 = (t) => Math.min(1, Math.max(0, t));
 const seg = (p, a, b) => clamp01((p - a) / (b - a));
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
-let fitScale = 1;
+let fitScale = 1, fitIntro = 1;
 function cameraFromScroll(p, outPos, outLook) {
   const d = ease(seg(p, 0, 0.55));
   const o = ease(seg(p, 0.55, 0.9));
@@ -249,10 +363,13 @@ function cameraFromScroll(p, outPos, outLook) {
   // B: orbit to a 3/4 front-left view for the services
   const posB = v3(5.1, 2.05, DRIVE + 5.3);
   const lookB = v3(0, 0.3, DRIVE + 0.25);
+  // portrait screens: the intro shows the car lower in the frame, under the title
+  lookA.y += (fitIntro - 1) * 0.55;
   outLook.copy(lookA).lerp(lookB, o);
   outPos.copy(posA).lerp(posB, o);
   // keep the car filling the frame on narrow (portrait) screens
-  outPos.sub(outLook).multiplyScalar(fitScale).add(outLook);
+  const fit = fitIntro + (fitScale - fitIntro) * o;
+  outPos.sub(outLook).multiplyScalar(fit).add(outLook);
   return carZ;
 }
 
@@ -269,6 +386,7 @@ function resize() {
   camera.aspect = W / H;
   camera.updateProjectionMatrix();
   fitScale = Math.max(1, Math.pow(1.5 / camera.aspect, 0.72));
+  fitIntro = Math.max(1, Math.pow(1.5 / camera.aspect, 0.42));
 }
 window.addEventListener('resize', resize);
 resize();
@@ -316,19 +434,37 @@ function frame() {
   intro.style.opacity = String(1 - seg(p, 0.03, 0.2));
   const inServices = p > 0.86 && !focused;
   servicesUI.classList.toggle('show', inServices);
+  const placed = [];
   for (const s of SERVICES) {
     if (!s.local) continue;
     const world = car.localToWorld(tmp.copy(s.local));
     toCam.copy(camera.position).sub(world).normalize();
     const facing = s.normalV.dot(toCam) > 0.05;
     world.project(camera);
-    const x = (world.x * 0.5 + 0.5) * W;
-    const y = (-world.y * 0.5 + 0.5) * H;
     const show = inServices && facing && world.z < 1;
     s.el.classList.toggle('hidden', !show);
     s.el.tabIndex = show ? 0 : -1;
-    s.el.style.transform = `translate(${x - 22}px, ${y - 22}px)`;
+    s.sx = (world.x * 0.5 + 0.5) * W - 22;
+    s.sy = (-world.y * 0.5 + 0.5) * H - 22;
+    if (show) placed.push(s);
   }
+  // keep the balloons from covering each other: push overlapping ones down
+  // (on phones only the dots are shown, so they need much less room)
+  const small = W <= 640;
+  const rowH = small ? 26 : 50;
+  placed.sort((a, b) => a.sy - b.sy);
+  for (let i = 0; i < placed.length; i++) {
+    const a = placed[i];
+    const aw = small ? 26 : (a.el.offsetWidth || 44);
+    for (let j = 0; j < i; j++) {
+      const b = placed[j];
+      const bw = small ? 26 : (b.el.offsetWidth || 44);
+      const ax = a.sx + (small ? 9 : 0), bx = b.sx + (small ? 9 : 0);
+      const overlapX = ax < bx + bw + 4 && bx < ax + aw + 4;
+      if (overlapX && a.sy < b.sy + rowH) a.sy = b.sy + rowH;
+    }
+  }
+  for (const s of SERVICES) if (s.el) s.el.style.transform = `translate(${s.sx ?? -100}px, ${s.sy ?? -100}px)`;
 
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
