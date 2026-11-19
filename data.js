@@ -14,6 +14,21 @@ window.AUTO_MM = {
      (1 = pondelok … 7 = nedeľa) */
   hours: null,
 
+  /* Supabase – kam sa ukladajú objednávky z formulára.
+     url a publishableKey nájdete v Supabase: Project Settings → API Keys / Data API.
+     Sem patrí IBA verejný kľúč (sb_publishable_… alebo starší „anon public“).
+     Tajný kľúč (sb_secret_… / service_role) sem NIKDY nevkladajte.
+     Kým sú prázdne, formulár pripraví SMS ako doteraz. */
+  supabase: {
+    url: '',
+    publishableKey: ''
+  },
+
+  /* Služby, ktoré sú len vo formulári (nie sú na 3D aute). */
+  extraBookingServices: [
+    { id: 'servis', name: 'Servis a servisná prehliadka' }
+  ],
+
   /* Služby. anchor/normal/view = poloha balóna v 3D scéne (netreba meniť). */
   services: [
     {

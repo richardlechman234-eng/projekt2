@@ -24,7 +24,7 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=15">
   <script type="importmap">
     {
       "imports": {
@@ -255,23 +255,41 @@
           <h2 id="obj-title">Objednajte sa na servis</h2>
           <p class="lead">Vyplňte pár údajov a ozveme sa vám s termínom. Ak to súrne, radšej zavolajte.</p>
           <form class="booking" id="booking" novalidate>
+            <label>Služba<select name="sluzba" id="booking-service" required></select></label>
             <div class="field-row">
-              <label>Meno a priezvisko<input name="meno" autocomplete="name" required></label>
-              <label>Telefón<input name="telefon" type="tel" autocomplete="tel" inputmode="tel" placeholder="09xx xxx xxx" required></label>
+              <label>Preferovaný dátum<input name="datum" type="date" required></label>
+              <label>Čas<select name="cas" id="booking-time-type">
+                <option value="dopoludnia">dopoludnia</option>
+                <option value="popoludni">popoludní</option>
+                <option value="jedno">je mi to jedno</option>
+                <option value="konkretny">konkrétny čas…</option>
+              </select></label>
             </div>
+            <label id="booking-time-wrap" hidden>Konkrétny čas<input name="cas_presny" type="time" min="07:00" max="18:00" step="900"></label>
             <div class="field-row">
-              <label>Značka a model auta<input name="auto" placeholder="napr. Škoda Octavia 2017" required></label>
-              <label>Služba<select name="sluzba" id="booking-service" required></select></label>
+              <label>Meno a priezvisko<input name="meno" autocomplete="name" maxlength="100" required></label>
+              <label>Telefón<input name="telefon" type="tel" autocomplete="tel" inputmode="tel" placeholder="09xx xxx xxx" maxlength="30" required></label>
             </div>
+            <label>E-mail<input name="email" type="email" autocomplete="email" inputmode="email" placeholder="vas@email.sk" maxlength="200" required></label>
             <div class="field-row">
-              <label>Preferovaný dátum<input name="datum" type="date"></label>
-              <label>Čas<select name="cas"><option>dopoludnia</option><option>popoludní</option><option>je mi to jedno</option></select></label>
+              <label>Značka a model auta<input name="auto" placeholder="napr. Škoda Octavia 2017" maxlength="100" required></label>
+              <label>ŠPZ (nepovinné)<input name="spz" placeholder="napr. BA123XY" maxlength="15" autocapitalize="characters"></label>
             </div>
-            <label>Poznámka (nepovinné)<textarea name="poznamka" rows="3" placeholder="Čo vás trápi? Napr. pískajú brzdy, svieti kontrolka motora…"></textarea></label>
+            <label>Poznámka (nepovinné)<textarea name="poznamka" rows="3" maxlength="1000" placeholder="Čo vás trápi? Napr. pískajú brzdy, svieti kontrolka motora…"></textarea></label>
+            <!-- ochrana proti spamu: ľudia toto pole nevidia, roboty ho vyplnia -->
+            <div class="hp" aria-hidden="true"><label>Web stránka<input name="web" tabindex="-1" autocomplete="off"></label></div>
             <p class="form-legal">Údaje použijeme len na vybavenie vašej objednávky. Viac v <a href="ochrana-osobnych-udajov.html">zásadách ochrany osobných údajov</a>.</p>
             <p class="form-error" id="booking-error" role="alert" hidden></p>
-            <button class="btn btn-white btn-lg" type="submit">Odoslať objednávku</button>
+            <button class="btn btn-white btn-lg" type="submit" id="booking-submit">Odoslať objednávku</button>
           </form>
+          <div class="booking-done" id="booking-sent" hidden tabindex="-1" role="status">
+            <h3>Objednávka prijatá, ozveme sa vám s potvrdením termínu</h3>
+            <p id="booking-sent-text"></p>
+            <div class="row-actions">
+              <button class="btn btn-white" id="booking-again" type="button">Nová objednávka</button>
+              <a class="btn btn-ghost" href="tel:+421917973170">Zavolať</a>
+            </div>
+          </div>
           <div class="booking-done" id="booking-done" hidden tabindex="-1">
             <h3>Objednávka je pripravená</h3>
             <p id="booking-done-text"></p>
@@ -330,8 +348,8 @@
     <a href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Navigovať</a>
   </nav>
 
-  <script src="data.js?v=14"></script>
-  <script type="module" src="app.js?v=14"></script>
-  <script src="site.js?v=14" defer></script>
+  <script src="data.js?v=15"></script>
+  <script type="module" src="app.js?v=15"></script>
+  <script src="site.js?v=15" defer></script>
 </body>
 </html>

@@ -80,17 +80,28 @@
   /* ---------- objednávkový formulár ---------- */
   const form = $('booking');
   const select = $('booking-service');
-  [...D.services.map((s) => [s.id, s.name]), ['ine', 'Iné / neviem']].forEach(([id, name]) => {
-    select.append(new Option(name, id));
+  [...(D.extraBookingServices || []), ...D.services, { id: 'ine', name: 'Iné / neviem' }].forEach((s) => {
+    select.append(new Option(s.name, s.id));
   });
+  // dnešok a „o rok“ podľa slovenského času (nie UTC – inak by po polnoci neskoro večer nesedel deň)
+  const isoInBratislava = (date) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Bratislava' }).format(date);
+  const todayISO = () => isoInBratislava(new Date());
+  const yearAheadISO = () => isoInBratislava(new Date(Date.now() + 365 * 864e5));
   const dateInput = form.elements.datum;
-  const todayISO = new Date().toISOString().slice(0, 10);
-  dateInput.min = todayISO;
+  dateInput.min = todayISO();
+  dateInput.max = yearAheadISO();
+  const timeType = $('booking-time-type');
+  const timeWrap = $('booking-time-wrap');
+  timeType.addEventListener('change', () => {
+    timeWrap.hidden = timeType.value !== 'konkretny';
+    if (!timeWrap.hidden) form.elements.cas_presny.focus();
+  });
+  const formOpenedAt = Date.now();
 
   function book(id) {
     if (id) select.value = id;
     $('objednavka').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => form.elements.meno.focus({ preventScroll: true }), 600);
+    setTimeout(() => form.elements.datum.focus({ preventScroll: true }), 600);
   }
   window.addEventListener('automm:book', (e) => book(e.detail && e.detail.id));
 
@@ -135,30 +146,105 @@
   };
   const skDate = (iso) => { if (!iso) return 'podľa dohody'; const [y, m, d] = iso.split('-'); return `${Number(d)}. ${Number(m)}. ${y}`; };
 
-  form.addEventListener('submit', (e) => {
+  const emailOk = (v) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim());
+  const SB = D.supabase || {};
+  const useSupabase = !!(SB.url && SB.publishableKey);
+  const err = $('booking-error');
+  const showError = (text, field) => {
+    err.textContent = text;
+    err.hidden = false;
+    if (field) field.focus();
+  };
+
+  // uloženie do Supabase cez REST (bez knižnice). Verejný kľúč smie iba vkladať – čítať nemôže (RLS).
+  async function saveReservation(row) {
+    const headers = { 'Content-Type': 'application/json', apikey: SB.publishableKey, Prefer: 'return=minimal' };
+    if (SB.publishableKey.startsWith('eyJ')) headers.Authorization = `Bearer ${SB.publishableKey}`;   // starší „anon“ kľúč
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    try {
+      const res = await fetch(`${SB.url.replace(/\/+$/, '')}/rest/v1/reservations`, {
+        method: 'POST', headers, body: JSON.stringify(row), signal: ctrl.signal
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = form.elements;
-    const err = $('booking-error');
-    const missing = [];
-    if (!f.meno.value.trim()) missing.push('meno');
-    if (!phoneOk(f.telefon.value)) missing.push('platné telefónne číslo');
-    if (!f.auto.value.trim()) missing.push('značku a model auta');
-    if (missing.length) {
-      err.textContent = 'Prosím, doplňte: ' + missing.join(', ') + '.';
-      err.hidden = false;
-      (!f.meno.value.trim() ? f.meno : !phoneOk(f.telefon.value) ? f.telefon : f.auto).focus();
+    const v = (name) => f[name].value.trim();
+
+    // kontrola polí (v poradí, ako sú vo formulári)
+    const checks = [
+      [!v('datum'), 'Vyberte preferovaný dátum.', f.datum],
+      [v('datum') && v('datum') < todayISO(), 'Dátum nemôže byť v minulosti. Vyberte dnešný alebo neskorší deň.', f.datum],
+      [v('datum') > yearAheadISO(), 'Termín si môžete rezervovať najviac rok dopredu.', f.datum],
+      [f.cas.value === 'konkretny' && !v('cas_presny'), 'Zadajte konkrétny čas, alebo zvoľte dopoludnia / popoludní.', f.cas_presny],
+      [v('meno').length < 2, 'Doplňte meno a priezvisko.', f.meno],
+      [!phoneOk(f.telefon.value), 'Zadajte platné telefónne číslo (napr. 0917 123 456).', f.telefon],
+      [!emailOk(f.email.value), 'Zadajte platný e-mail.', f.email],
+      [v('auto').length < 2, 'Doplňte značku a model auta.', f.auto]
+    ];
+    const bad = checks.find(([fail]) => fail);
+    if (bad) { showError(bad[1], bad[2]); return; }
+    err.hidden = true;
+
+    const service = select.options[select.selectedIndex].text;
+    const timeText = f.cas.value === 'konkretny' ? `o ${v('cas_presny')}` : f.cas.options[f.cas.selectedIndex].text;
+
+    if (useSupabase) {
+      // ochrana proti spamu: vyplnené skryté pole alebo odoslanie do 3 s od načítania = robot.
+      // Robotovi ukážeme „úspech“, ale nič neuložíme.
+      const isBot = v('web') !== '' || Date.now() - formOpenedAt < 3000;
+      const btn = $('booking-submit');
+      btn.disabled = true;
+      btn.textContent = 'Odosielam…';
+      try {
+        if (!isBot) {
+          await saveReservation({
+            sluzba: service,
+            datum: v('datum'),
+            cas_typ: f.cas.value,
+            cas: f.cas.value === 'konkretny' ? v('cas_presny') : null,
+            meno: v('meno'),
+            telefon: v('telefon'),
+            email: v('email'),
+            auto: v('auto'),
+            spz: v('spz').toUpperCase().replace(/\s+/g, '') || null,
+            poznamka: v('poznamka') || null
+          });
+        }
+        $('booking-sent-text').textContent =
+          `${service}, ${skDate(v('datum'))} ${timeText}. Termín vám potvrdíme telefonicky alebo e-mailom. Ak je to súrne, zavolajte na ${D.phoneDisplay}.`;
+        form.hidden = true;
+        const sent = $('booking-sent');
+        sent.hidden = false;
+        sent.focus();
+        form.reset();
+        timeWrap.hidden = true;
+      } catch (ex) {
+        console.error('Objednávku sa nepodarilo uložiť', ex);
+        showError(`Objednávku sa nepodarilo odoslať. Skúste to o chvíľu znova alebo nám zavolajte na ${D.phoneDisplay}.`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Odoslať objednávku';
+      }
       return;
     }
-    err.hidden = true;
-    const service = select.options[select.selectedIndex].text;
+
+    // Supabase ešte nie je nastavený: pripraviť SMS ako doteraz
     const msg = [
       'Objednávka – AUTO MM Servis',
-      `Meno: ${f.meno.value.trim()}`,
-      `Telefón: ${f.telefon.value.trim()}`,
-      `Auto: ${f.auto.value.trim()}`,
+      `Meno: ${v('meno')}`,
+      `Telefón: ${v('telefon')}`,
+      `E-mail: ${v('email')}`,
+      `Auto: ${v('auto')}${v('spz') ? ` (${v('spz').toUpperCase()})` : ''}`,
       `Služba: ${service}`,
-      `Termín: ${skDate(f.datum.value)}, ${f.cas.value}`,
-      f.poznamka.value.trim() ? `Poznámka: ${f.poznamka.value.trim()}` : ''
+      `Termín: ${skDate(v('datum'))}, ${timeText}`,
+      v('poznamka') ? `Poznámka: ${v('poznamka')}` : ''
     ].filter(Boolean).join('\n');
 
     $('booking-summary').textContent = msg;
@@ -168,6 +254,12 @@
     const done = $('booking-done');
     done.hidden = false;
     done.focus();
+  });
+
+  $('booking-again').addEventListener('click', () => {
+    $('booking-sent').hidden = true;
+    form.hidden = false;
+    form.elements.sluzba.focus();
   });
 
   $('booking-copy').addEventListener('click', async (e) => {

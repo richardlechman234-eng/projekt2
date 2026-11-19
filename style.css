@@ -386,13 +386,16 @@ section[id] { scroll-margin-top: 72px; }
   font: 400 16px var(--font);
 }
 .booking textarea { resize: vertical; min-height: 96px; }
+.booking input[type="time"] { color-scheme: dark; }
+.booking .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.booking button[disabled] { opacity: .6; cursor: wait; }
 .booking input::placeholder, .booking textarea::placeholder { color: rgba(255,255,255,.55); }
 .booking input:focus, .booking select:focus, .booking textarea:focus { outline: 2px solid var(--white); outline-offset: 1px; }
 .booking input[type="date"] { color-scheme: dark; }
 .form-legal { margin: 0; font-size: 13px; color: rgba(255,255,255,.8); }
 .form-error { margin: 0; padding: 10px 14px; border-radius: 10px; background: var(--dark); font-weight: 600; }
 .booking button { justify-self: start; }
-.booking-done { background: var(--blue-deep); border-radius: 18px; padding: 24px; display: grid; gap: 12px; }
+.booking-done { scroll-margin-top: 96px; background: var(--blue-deep); border-radius: 18px; padding: 24px; display: grid; gap: 12px; }
 .booking-done h3 { font-size: 26px; }
 .booking-done p { margin: 0; }
 .booking-done pre {
