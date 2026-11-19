@@ -20,8 +20,8 @@ window.AUTO_MM = {
      Tajný kľúč (sb_secret_… / service_role) sem NIKDY nevkladajte.
      Kým sú prázdne, formulár pripraví SMS ako doteraz. */
   supabase: {
-    url: '',
-    publishableKey: ''
+    url: 'https://erjopcachzansloyywas.supabase.co',
+    publishableKey: 'sb_publishable_Cf8JkB0-ZuM7ocM5j5uH-g_o97sM2IM'
   },
 
   /* Služby, ktoré sú len vo formulári (nie sú na 3D aute). */
