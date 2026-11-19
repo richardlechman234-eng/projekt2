@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0a0202">
+  <title>Rezervácie – AUTO MM Servis</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="admin.css?v=17">
+</head>
+<body class="admin">
+  <!-- prihlásenie -->
+  <main class="login" id="login" hidden>
+    <form class="login-card" id="login-form" novalidate>
+      <p class="eyebrow">AUTO MM Servis</p>
+      <h1>Rezervácie</h1>
+      <label>E-mail<input name="email" type="email" autocomplete="username" inputmode="email" required></label>
+      <label>Heslo<input name="password" type="password" autocomplete="current-password" required></label>
+      <p class="form-error" id="login-error" role="alert" hidden></p>
+      <button class="btn btn-white btn-block btn-lg" type="submit" id="login-btn">Prihlásiť sa</button>
+    </form>
+  </main>
+
+  <!-- zoznam rezervácií -->
+  <div class="app" id="app" hidden>
+    <header class="adm-top">
+      <div class="adm-title">
+        <h1>Rezervácie</h1>
+        <span class="new-count" id="new-count" hidden></span>
+      </div>
+      <div class="adm-actions">
+        <button class="icon-btn" id="refresh" type="button" aria-label="Obnoviť">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-sm" id="logout" type="button">Odhlásiť</button>
+      </div>
+      <nav class="filters" id="filters" aria-label="Filter podľa stavu"></nav>
+      <label class="sort">Zoradiť
+        <select id="sort">
+          <option value="termin">Termín – najbližšie</option>
+          <option value="termin-desc">Termín – najneskôr</option>
+          <option value="prijate">Prijaté – najnovšie</option>
+        </select>
+      </label>
+    </header>
+    <main class="list" id="list" aria-live="polite"></main>
+  </div>
+
+  <!-- dialóg pre akcie -->
+  <dialog class="sheet" id="sheet">
+    <form method="dialog" id="sheet-form" novalidate>
+      <h2 id="sheet-title"></h2>
+      <p class="sheet-sub" id="sheet-sub"></p>
+      <div id="sheet-fields"></div>
+      <p class="form-error" id="sheet-error" role="alert" hidden></p>
+      <div class="sheet-actions">
+        <button class="btn btn-ghost btn-lg" value="cancel" type="button" id="sheet-cancel">Späť</button>
+        <button class="btn btn-white btn-lg" type="submit" id="sheet-ok"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="data.js?v=17"></script>
+  <script type="module" src="admin.js?v=17"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# Nastavenia pre Supabase CLI (nasadenie Edge Functions).
+project_id = "erjopcachzansloyywas"
+
+# Obe funkcie si overujú oprávnenie samy (admin cez RLS, upozornenie len raz na čerstvú rezerváciu).
+[functions.nova-rezervacia]
+verify_jwt = false
+
+[functions.email-zakaznikovi]
+verify_jwt = false
