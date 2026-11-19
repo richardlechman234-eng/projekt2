@@ -477,7 +477,7 @@ const rimMat = new THREE.MeshStandardMaterial({ color: '#c9cbd0', metalness: 0.9
   wheelSet.add(hit);
   wheelSetMeshes.push(hit);
 }
-const wheelGlowMats = [tyreMat, rimMat, wheelSetMeshes[1].material[1]];
+const wheelGlowMats = [rimMat, wheelSetMeshes[1].material[1]];   // tyres stay black, only the rims light up
 
 /* ---------------- load model ---------------- */
 const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
@@ -773,7 +773,8 @@ function frame() {
   // tyre set highlight (mouse over the wheels or the balloon, or while its panel is open)
   const glowTarget = ((wheelHover && canPick()) || balloonHover) ? 1 : (tyreService && focused === tyreService) ? 0.2 : 0;
   glow += (glowTarget - glow) * Math.min(1, k * 2.5);
-  for (const m of wheelGlowMats) m.emissiveIntensity = glow * 0.45;
+  for (const m of wheelGlowMats) m.emissiveIntensity = glow * 0.6;
+  wheelSet.scale.setScalar(1 + 0.04 * glow);
   if (tyreService?.el) tyreService.el.classList.toggle('active', wheelHover);
 
   if (focused && focused.local) {
