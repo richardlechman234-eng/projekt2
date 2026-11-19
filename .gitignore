@@ -1,0 +1,10 @@
+# Tajné údaje NIKDY do GitHubu (kľúče patria do Supabase → Edge Functions → Secrets)
+*.json.key
+*service-account*.json
+*serviceaccount*.json
+*-credentials*.json
+client_secret*.json
+supabase-token.txt
+.env
+.env.*
+supabase/.temp/

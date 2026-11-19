@@ -174,7 +174,8 @@ function card(r) {
       r.poznamka_admina && h('div', { class: 'internal' }, h('dt', {}, 'Interná poznámka'), h('dd', { class: 'pre' }, r.poznamka_admina))
     ),
     h('p', { class: 'res-meta' }, `Prijaté ${ago(r.vytvorene)} (${new Date(r.vytvorene).toLocaleString('sk-SK', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' })})`,
-      r.email_odoslany ? ` · e-mail zákazníkovi ${ago(r.email_odoslany)}` : ''),
+      r.email_odoslany ? ` · e-mail zákazníkovi ${ago(r.email_odoslany)}` : '',
+      r.google_event_id ? ' · 📅 v Google Kalendári' : ''),
     r.anonymizovane ? h('div', { class: 'res-actions' },
       h('button', { type: 'button', class: 'btn btn-danger', onclick: () => actDelete(r) }, 'Vymazať')
     ) : h('div', { class: 'res-actions' },
@@ -182,6 +183,7 @@ function card(r) {
       h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => actPropose(r) }, 'Iný termín'),
       h('button', { type: 'button', class: 'btn btn-ghost', disabled: r.stav === 'dokoncena', onclick: () => actDone(r) }, 'Dokončené'),
       h('button', { type: 'button', class: 'btn btn-ghost', disabled: r.stav === 'zamietnuta', onclick: () => actReject(r) }, 'Zamietnuť'),
+      h('button', { type: 'button', class: 'btn btn-ghost', disabled: !['caka', 'potvrdena'].includes(r.stav), onclick: () => actCancel(r) }, 'Zrušiť termín'),
       h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => actNote(r) }, 'Poznámka'),
       h('button', { type: 'button', class: 'btn btn-danger', onclick: () => actDelete(r) }, 'Vymazať')
     )
@@ -232,21 +234,34 @@ const emailToggle = (r) => h('label', { class: 'check' },
   h('span', {}, 'Poslať zákazníkovi e-mail na ', h('strong', {}, r.email)));
 
 // uloží zmenu, potom (ak treba) pošle e-mail cez Edge Function
+// zavolá Edge Function a vráti { data } alebo { error: 'čitateľný dôvod' }
+async function callFn(name, body) {
+  const { data, error } = await sb.functions.invoke(name, { body });
+  if (!error && !data?.error) return { data };
+  let detail = data?.error || error?.message || 'neznáma chyba';
+  try { detail = (await error?.context?.json())?.error || detail; } catch (_) { /* */ }
+  return { error: detail };
+}
+
+// uloží zmenu; pri zmene stavu/termínu zosynchronizuje Google Kalendár; ak treba, pošle e-mail zákazníkovi
 async function save(r, patch, { sendMail = false, okText = 'Uložené' } = {}) {
   const { error } = await sb.from('reservations').update(patch).eq('id', r.id);
   if (error) return `Nepodarilo sa uložiť: ${error.message}`;
-  if (sendMail) {
-    const { data, error: fe } = await sb.functions.invoke('email-zakaznikovi', { body: { id: r.id } });
-    if (fe || data?.error) {
-      let detail = data?.error || fe?.message || '';
-      try { detail = (await fe?.context?.json())?.error || detail; } catch (_) { /* */ }
-      toast(`${okText}, ale e-mail sa nepodarilo odoslať. ${detail}`, true);
-      await load(true);
-      return null;
-    }
-    okText += ' · e-mail odoslaný';
+  const parts = [okText];
+  const problems = [];
+  if ('stav' in patch || 'datum' in patch) {
+    const cal = await callFn('kalendar', { id: r.id });
+    if (cal.error) problems.push(`Google Kalendár: ${cal.error}`);
+    else if (cal.data?.action === 'created') parts.push('pridané do kalendára');
+    else if (cal.data?.action === 'updated') parts.push('kalendár upravený');
+    else if (cal.data?.action === 'deleted') parts.push('odstránené z kalendára');
   }
-  toast(okText);
+  if (sendMail) {
+    const mail = await callFn('email-zakaznikovi', { id: r.id });
+    if (mail.error) problems.push(`e-mail sa nepodarilo odoslať: ${mail.error}`);
+    else parts.push('e-mail odoslaný');
+  }
+  toast(parts.join(' · ') + (problems.length ? `. Pozor – ${problems.join('; ')}` : ''), problems.length > 0);
   await load(true);
   return null;
 }
@@ -323,6 +338,15 @@ function actDone(r) {
   });
 }
 
+function actCancel(r) {
+  openSheet({
+    title: 'Zrušiť termín', sub: `${r.meno} · ${r.sluzba} · ${skDate(r.datum)}`, ok: 'Zrušiť termín', danger: true,
+    fields: [field('Odkaz pre zákazníka (nepovinné)', textarea('sprava', 'napr. Zrušené na vašu žiadosť. Ozvite sa, keď budete chcieť nový termín.')), emailToggle(r)],
+    onSubmit: (fd) => save(r, { stav: 'zrusena', sprava_zakaznikovi: fd.get('sprava').trim() || null },
+      { sendMail: fd.has('posli'), okText: 'Termín zrušený' })
+  });
+}
+
 function actNote(r) {
   openSheet({
     title: 'Interná poznámka', sub: 'Zákazník ju neuvidí.', ok: 'Uložiť',
@@ -337,9 +361,14 @@ function actDelete(r) {
     sub: `Rezervácia #${r.id} (${r.meno}, ${skDate(r.datum, false)}) sa vymaže aj so všetkými osobnými údajmi. Vrátiť sa to nedá.`,
     ok: 'Vymazať', danger: true, fields: [],
     onSubmit: async () => {
+      let calNote = '';
+      if (r.google_event_id) {
+        const cal = await callFn('kalendar', { id: r.id, remove: true });
+        if (cal.error) calNote = ' Udalosť v Google Kalendári sa nepodarilo zmazať – zmažte ju ručne.';
+      }
       const { error } = await sb.from('reservations').delete().eq('id', r.id);
       if (error) return `Nepodarilo sa vymazať: ${error.message}`;
-      toast('Rezervácia vymazaná');
+      toast('Rezervácia vymazaná.' + calNote, !!calNote);
       await load(true);
       return null;
     }

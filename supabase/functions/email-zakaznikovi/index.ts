@@ -1,7 +1,8 @@
 // E-mail zákazníkovi po zmene stavu. Volá ju admin panel s { id } a prihláseným adminom.
 // Rezerváciu číta s právami prihláseného používateľa – kto nie je admin, nič neprečíta (RLS).
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { cors, json, esc, rows, layout, sendEmail, skDate, skTime } from '../_shared/email.ts';
+import { cors, json, esc, rows, layout, sendEmail, skDate, skTime, type Attachment } from '../_shared/email.ts';
+import { googleCalendarLink, icsFile, terminOf, toBase64 } from '../_shared/termin.ts';
 
 const PHONE = '0917 973 170';
 const p = (t: string) => `<p style="margin:0 0 14px">${t}</p>`;
@@ -30,11 +31,20 @@ Deno.serve(async (req) => {
   const detail = rows([['Služba', r.sluzba], ['Termín', termin], ['Auto', r.spz ? `${r.auto} (${r.spz})` : r.auto]]);
   const hi = p(`Dobrý deň${r.meno ? `, ${esc(r.meno.split(' ')[0])}` : ''},`);
   let subject: string, title: string, body: string;
+  const attachments: Attachment[] = [];
 
   if (r.stav === 'potvrdena') {
     subject = `Termín potvrdený – ${skDate(r.datum)}`;
     title = 'Váš termín je potvrdený';
+    // termín do kalendára zákazníka: príloha .ics + odkaz pre Google Kalendár
+    const t = terminOf(r);
+    const calTitle = `AUTO MM Servis – ${r.sluzba}`;
+    const calText = [`Služba: ${r.sluzba}`, `Auto: ${r.spz ? `${r.auto} (${r.spz})` : r.auto}`, r.sprava_zakaznikovi ? `Odkaz zo servisu: ${r.sprava_zakaznikovi}` : '', `Tel. servisu: ${PHONE}`].filter(Boolean).join('\n');
+    attachments.push({ name: 'termin-auto-mm-servis.ics', contentBase64: toBase64(icsFile(r.id, calTitle, calText, t)) });
+    const gcal = googleCalendarLink(calTitle, calText, t);
     body = hi + p('ďakujeme za objednávku. Tešíme sa na vás:') + detail + note(r.sprava_zakaznikovi) +
+      `<p style="margin:0 0 16px"><a href="${esc(gcal)}" style="display:inline-block;background:#1441b5;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:10px">Pridať do Google Kalendára</a></p>` +
+      p('Termín nájdete aj v prílohe (súbor .ics) – otvorením ho pridáte do kalendára v telefóne alebo v Outlooku.') +
       p(`Ak by vám termín nevyhovoval, dajte nám vedieť odpoveďou na tento e-mail alebo na čísle ${PHONE}.`);
   } else if (r.stav === 'zamietnuta') {
     subject = 'Vašu rezerváciu nemôžeme prijať';
@@ -65,7 +75,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    await sendEmail({ to: r.email, subject, html: layout(title, body), replyTo: Deno.env.get('OWNER_EMAIL') ?? undefined });
+    await sendEmail({ to: r.email, subject, html: layout(title, body), replyTo: Deno.env.get('OWNER_EMAIL') ?? undefined, attachments });
   } catch (e) {
     return json({ error: String(e) }, 502);
   }

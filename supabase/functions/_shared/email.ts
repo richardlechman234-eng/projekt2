@@ -58,7 +58,8 @@ function parseFrom(from: string) {
   return m ? { name: m[1] || 'AUTO MM Servis', email: m[2] } : { name: 'AUTO MM Servis', email: from.trim() };
 }
 
-export async function sendEmail(o: { to: string; subject: string; html: string; replyTo?: string }) {
+export type Attachment = { name: string; contentBase64: string };
+export async function sendEmail(o: { to: string; subject: string; html: string; replyTo?: string; attachments?: Attachment[] }) {
   const fromRaw = Deno.env.get('EMAIL_FROM');
   if (!fromRaw) throw new Error('Chýba nastavenie EMAIL_FROM');
   const from = parseFrom(fromRaw);
@@ -72,6 +73,7 @@ export async function sendEmail(o: { to: string; subject: string; html: string; 
       body: JSON.stringify({
         sender: from, to: [{ email: o.to }], subject: o.subject, htmlContent: o.html,
         ...(o.replyTo ? { replyTo: { email: o.replyTo } } : {}),
+        ...(o.attachments?.length ? { attachment: o.attachments.map((a) => ({ name: a.name, content: a.contentBase64 })) } : {}),
       }),
     });
   } else if (resend) {
@@ -81,6 +83,7 @@ export async function sendEmail(o: { to: string; subject: string; html: string; 
       body: JSON.stringify({
         from: `${from.name} <${from.email}>`, to: [o.to], subject: o.subject, html: o.html,
         ...(o.replyTo ? { reply_to: o.replyTo } : {}),
+        ...(o.attachments?.length ? { attachments: o.attachments.map((a) => ({ filename: a.name, content: a.contentBase64 })) } : {}),
       }),
     });
   } else {
