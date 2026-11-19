@@ -94,6 +94,41 @@
   }
   window.addEventListener('automm:book', (e) => book(e.detail && e.detail.id));
 
+  /* ---------- náhrada za 3D: tlačidlá so službami ----------
+     app.js zavolá D.no3d(dôvod), keď nejde WebGL, model sa nenačíta alebo je mobil príliš pomalý.
+     Ak sa 3D vôbec nespustí (napr. nenačíta sa knižnica), zapne sa to samo po čase. */
+  const NO3D_MSG = {
+    webgl: 'Váš prehliadač nevie zobraziť 3D auto.',
+    model: '3D auto sa nepodarilo načítať.',
+    slow: 'Na tomto zariadení 3D zobrazenie nebeží plynulo.',
+    lost: '3D zobrazenie sa prerušilo.',
+    timeout: '3D auto sa načítava príliš dlho.'
+  };
+  function no3d(reason) {
+    if (document.body.classList.contains('no3d')) return;
+    D.failed3d = reason || 'timeout';
+    document.body.classList.add('no3d');
+    $('fallback-msg').textContent = (NO3D_MSG[D.failed3d] || '') + ' Vyberte službu a objednajte sa:';
+    const chips = $('fallback-chips');
+    D.services.forEach((s) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = s.name;
+      b.setAttribute('role', 'listitem');
+      b.addEventListener('click', () => book(s.id));
+      chips.append(b);
+    });
+    $('fallback').hidden = false;
+  }
+  D.no3d = no3d;
+  if (D.failed3d) no3d(D.failed3d);
+  const t0 = performance.now();
+  const watch = setInterval(() => {
+    if (D.ready3d || D.failed3d) { clearInterval(watch); return; }
+    const now = performance.now();
+    // 10 s bez pokroku v sťahovaní alebo 30 s celkovo
+    if (now - Math.max(t0, D.progress3d || 0) > 10000 || now - t0 > 30000) { clearInterval(watch); no3d('timeout'); }
+  }, 1000);
+
   const phoneOk = (v) => {
     const n = v.replace(/[\s/-]/g, '');
     return /^(\+421|00421|0)\d{9}$/.test(n) || /^\+\d{8,15}$/.test(n);   // SK aj zahraničné čísla

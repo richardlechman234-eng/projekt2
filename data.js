@@ -14,11 +14,11 @@ window.AUTO_MM = {
      (1 = pondelok … 7 = nedeľa) */
   hours: null,
 
-  /* Služby. anchor/normal/view = poloha balóna na 3D aute (netreba meniť). */
+  /* Služby. anchor/normal/view = poloha balóna v 3D scéne (netreba meniť). */
   services: [
     {
-      id: 'pneuservis', name: 'Pneuservis', anchor: 'hs_pneuservis',
-      normal: [1, 0, 0.2], view: [1.9, 0.35, 0.55],
+      id: 'pneuservis', name: 'Prezúvanie pneumatík', anchor: 'wheelset',   // balón je na sade kolies vedľa auta
+      normal: [0, 1, 0], view: [2.2, 0.85, 0.9],
       desc: 'Sezónne prezutie, vyváženie a oprava defektov.',
       items: ['Prezutie letných / zimných pneumatík', 'Vyváženie kolies', 'Oprava defektu', '[doplniť: uskladnenie pneumatík?]'],
       price: 'od [doplniť] €'
