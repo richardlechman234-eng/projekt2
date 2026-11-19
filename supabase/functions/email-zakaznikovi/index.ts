@@ -11,7 +11,8 @@ const note = (t: string | null) =>
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   const auth = req.headers.get('Authorization') ?? '';
-  const key = Deno.env.get('SUPABASE_ANON_KEY') ?? req.headers.get('apikey') ?? '';
+  // verejný kľúč, ktorý poslal admin panel (funguje so starými aj novými typmi kľúčov)
+  const key = req.headers.get('apikey') ?? Deno.env.get('SUPABASE_ANON_KEY') ?? '';
   const db = createClient(Deno.env.get('SUPABASE_URL')!, key, {
     global: { headers: { Authorization: auth } },
     auth: { persistSession: false },
