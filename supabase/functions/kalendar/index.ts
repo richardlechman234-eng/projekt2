@@ -5,7 +5,19 @@
 //   dokoncena                    → nechať tak (ostane ako história)
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { cors, json } from '../_shared/email.ts';
-import { calendarConfigured, calendarFetch } from '../_shared/google.ts';
+import { calendarConfigured, calendarFetch, calendarId, serviceAccountEmail } from '../_shared/google.ts';
+
+// zrozumiteľná chyba pre admina (404 = kalendár s týmto ID tento účet nevidí)
+async function googleError(res: Response) {
+  const text = await res.text();
+  if (res.status === 404) {
+    return new Error(`Kalendár s ID „${calendarId()}“ nevidí účet ${serviceAccountEmail()}. Skontrolujte, či je kalendár zdieľaný presne s týmto e-mailom (Vykonávať zmeny udalostí) a či je ID kalendára správne.`);
+  }
+  if (res.status === 403) {
+    return new Error(`Účet ${serviceAccountEmail()} nemá právo meniť kalendár „${calendarId()}“ – pri zdieľaní nastavte „Vykonávať zmeny udalostí“. (${text.slice(0, 200)})`);
+  }
+  return new Error(`Google ${res.status}: ${text.slice(0, 300)}`);
+}
 import { ADRESA, TZ, terminOf } from '../_shared/termin.ts';
 
 const TIME_NOTE: Record<string, string> = {
@@ -37,7 +49,7 @@ Deno.serve(async (req) => {
     if (remove || ['caka', 'zamietnuta', 'zrusena'].includes(r.stav)) {
       if (!r.google_event_id) return json({ ok: true, action: 'none' });
       const res = await calendarFetch(`/${encodeURIComponent(r.google_event_id)}`, { method: 'DELETE' });
-      if (!res.ok && res.status !== 404 && res.status !== 410) throw new Error(`Google ${res.status}: ${await res.text()}`);
+      if (!res.ok && res.status !== 404 && res.status !== 410) throw await googleError(res);
       if (!remove) await setEventId(null);
       return json({ ok: true, action: 'deleted' });
     }
@@ -65,11 +77,11 @@ Deno.serve(async (req) => {
     if (r.google_event_id) {
       const res = await calendarFetch(`/${encodeURIComponent(r.google_event_id)}`, { method: 'PUT', body: JSON.stringify(event) });
       if (res.ok) return json({ ok: true, action: 'updated' });
-      if (res.status !== 404 && res.status !== 410) throw new Error(`Google ${res.status}: ${await res.text()}`);
+      if (res.status !== 404 && res.status !== 410) throw await googleError(res);
       // udalosť niekto v kalendári ručne zmazal → vytvoríme novú
     }
     const res = await calendarFetch('', { method: 'POST', body: JSON.stringify(event) });
-    if (!res.ok) throw new Error(`Google ${res.status}: ${await res.text()}`);
+    if (!res.ok) throw await googleError(res);
     const created = await res.json();
     await setEventId(created.id);
     return json({ ok: true, action: 'created' });

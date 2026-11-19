@@ -11,6 +11,17 @@ const enc = (o: unknown) => b64url(new TextEncoder().encode(JSON.stringify(o)));
 
 let cached: { token: string; exp: number } | null = null;
 
+// ID kalendára bez medzier, úvodzoviek a prípadnej adresy (ak sa skopíroval celý odkaz)
+export function calendarId() {
+  let id = (Deno.env.get('GOOGLE_CALENDAR_ID') ?? '').trim().replace(/^["'“”]+|["'“”]+$/g, '').trim();
+  const m = id.match(/[?&]src=([^&]+)/);
+  if (m) id = decodeURIComponent(m[1]);
+  return id;
+}
+export function serviceAccountEmail() {
+  try { return JSON.parse(Deno.env.get('GOOGLE_SERVICE_ACCOUNT_JSON') ?? '{}').client_email ?? '?'; } catch { return '(neplatný JSON v GOOGLE_SERVICE_ACCOUNT_JSON)'; }
+}
+
 export function calendarConfigured() {
   return !!(Deno.env.get('GOOGLE_SERVICE_ACCOUNT_JSON') && Deno.env.get('GOOGLE_CALENDAR_ID'));
 }
@@ -42,7 +53,7 @@ export async function googleToken(): Promise<string> {
 }
 
 export async function calendarFetch(path: string, init: RequestInit = {}) {
-  const cal = encodeURIComponent(Deno.env.get('GOOGLE_CALENDAR_ID')!);
+  const cal = encodeURIComponent(calendarId());
   return fetch(`https://www.googleapis.com/calendar/v3/calendars/${cal}/events${path}`, {
     ...init,
     headers: { Authorization: `Bearer ${await googleToken()}`, 'Content-Type': 'application/json', ...(init.headers ?? {}) },
