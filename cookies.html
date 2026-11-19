@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0202">
+  <title>Cookies – AUTO MM Servis</title>
+  <meta name="description" content="Čo web AUTO MM Servis ukladá do prehliadača, na čo to slúži a ako zmeniť súhlas.">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="legal.css?v=17">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand show" href="./"><span id="brand-text">AUTO MM Servis</span></a>
+    <a class="btn btn-blue" href="./">Späť na web</a>
+  </header>
+  <main class="legal">
+    <h1>Cookies a úložisko v prehliadači</h1>
+    <p class="meta">Podľa § 109 ods. 8 zákona č. 452/2021 Z. z. o elektronických komunikáciách. Aktualizované [doplniť dátum].</p>
+
+    <p class="box"><strong>Stručne:</strong> nepoužívame analytiku, reklamu, sociálne siete ani sledovanie. Písma a knižnice (aj pre 3D auto) sú uložené priamo na našom webe, nič sa nenačítava z cudzích serverov.
+    Jediná nenevyhnutná vec je <strong>mapa Google</strong> – zobrazí sa až s vaším súhlasom alebo po kliknutí.</p>
+    <p><button type="button" class="btn btn-white" data-cookie-settings>Zmeniť nastavenia cookies</button></p>
+
+    <h2>1. Nevyhnutné úložisko (bez súhlasu)</h2>
+    <p>Tieto údaje sú nevyhnutné na fungovanie webu alebo na službu, o ktorú ste sami požiadali, preto súhlas nepotrebujú.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Názov</th><th>Typ</th><th>Účel</th><th>Platnosť</th></tr></thead>
+      <tbody>
+        <tr><td><code>automm-consent</code></td><td>localStorage (prvá strana)</td><td>zapamätá si vašu voľbu o cookies, aby sme sa nepýtali pri každej návšteve</td><td>12 mesiacov alebo do zmeny</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Administrácia (len pre pracovníkov servisu)</h3>
+    <p>Na neverejnej stránke administrácie objednávok sa po prihlásení ukladajú tieto údaje. Bežných návštevníkov sa netýkajú.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Názov</th><th>Typ</th><th>Účel</th><th>Platnosť</th></tr></thead>
+      <tbody>
+        <tr><td><code>automm-admin</code></td><td>localStorage (prvá strana)</td><td>prihlásenie pracovníka (Supabase Auth)</td><td>do odhlásenia</td></tr>
+        <tr><td><code>automm-filter</code>, <code>automm-sort</code></td><td>localStorage (prvá strana)</td><td>zapamätanie zvoleného filtra a zoradenia zoznamu</td><td>do vymazania v prehliadači</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>2. Externý obsah – len so súhlasom</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Služba</th><th>Poskytovateľ</th><th>Čo sa deje</th><th>Kedy</th></tr></thead>
+      <tbody>
+        <tr><td>Mapy Google (mapa v sekcii Kontakt)</td><td>Google Ireland Limited, Írsko</td><td>Google získa vašu IP adresu a môže uložiť vlastné cookies (napr. <code>NID</code>, <code>AEC</code>) – <a href="https://policies.google.com/technologies/cookies?hl=sk" target="_blank" rel="noopener">zoznam cookies Google</a></td><td>po súhlase v lište („Prijať všetko“ alebo „Mapy Google“ v nastaveniach), alebo jednorazovo po kliknutí na „Zobraziť mapu“</td></tr>
+      </tbody>
+    </table></div>
+    <p>Odkazy „Navigovať“ a „Otvoriť v Google Mapách“ otvárajú stránku Google až po vašom kliknutí v novom okne – na našom webe nič neukladajú.</p>
+
+    <h2>3. Čo web neukladá</h2>
+    <ul>
+      <li>Objednávkový formulár odošle údaje priamo do našej databázy (Supabase, EÚ) – v prehliadači nič neostáva. Viac v <a href="ochrana-osobnych-udajov.html">ochrane osobných údajov</a>.</li>
+      <li>Písma, 3D model a knižnice sú súbormi nášho webu. Prehliadač si ich môže bežne uložiť do vyrovnávacej pamäte (cache), aby sa stránka načítala rýchlejšie – nejde o sledovanie.</li>
+      <li>Hosting (GitHub Pages) nevkladá na tento web žiadne cookies.</li>
+    </ul>
+
+    <h2>4. Ako súhlas zmeniť alebo odvolať</h2>
+    <p>Kedykoľvek cez tlačidlo <button type="button" class="linklike" data-cookie-settings>Nastavenia cookies</button> (je aj v pätičke každej stránky). Po odvolaní súhlasu sa mapa hneď skryje. Cookies, ktoré už uložil Google, vymažete v nastaveniach prehliadača (Nastavenia → Ochrana súkromia → Vymazať údaje prehliadania / cookies pre google.com).</p>
+
+    <p style="margin-top:36px"><a class="btn btn-blue" href="./">Späť na web</a></p>
+  </main>
+  <footer class="legal-foot">
+    <p><a href="obchodne-podmienky.html">Obchodné podmienky</a> · <a href="ochrana-osobnych-udajov.html">Ochrana osobných údajov</a> · <a href="cookies.html">Cookies</a> · <button type="button" class="linklike" data-cookie-settings>Nastavenia cookies</button></p>
+    <p>© 2026 AUTO MM Servis · Pasienková 66, 821 06 Bratislava</p>
+  </footer>
+  <script src="consent.js?v=17" defer></script>
+</body>
+</html>

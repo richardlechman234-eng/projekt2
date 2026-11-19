@@ -480,7 +480,7 @@ const rimMat = new THREE.MeshStandardMaterial({ color: '#c9cbd0', metalness: 0.9
 const wheelGlowMats = [rimMat, wheelSetMeshes[1].material[1]];   // tyres stay black, only the rims light up
 
 /* ---------------- load model ---------------- */
-const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
+const draco = new DRACOLoader().setDecoderPath('vendor/three/addons/libs/draco/gltf/');
 const loader = new GLTFLoader().setDRACOLoader(draco);
 loader.load('assets/car.glb', (gltf) => {
   const model = gltf.scene;

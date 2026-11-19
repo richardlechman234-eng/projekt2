@@ -271,16 +271,40 @@
     }
   });
 
-  /* ---------- mapa až po súhlase (GDPR) ---------- */
-  $('map-load').addEventListener('click', () => {
-    const box = $('map');
+  /* ---------- mapa Google: až po súhlase (cookie lišta) alebo po kliknutí ----------
+     Bez súhlasu sa mapa načíta len po kliknutí na „Zobraziť mapu“ (jednorazovo, len pre túto návštevu).
+     So súhlasom „Mapy Google“ sa načíta sama, keď k nej návštevník doscrolluje. */
+  const mapBox = $('map');
+  const mapPlaceholder = [...mapBox.childNodes];
+  function loadMap() {
+    if (mapBox.classList.contains('loaded')) return;
     const iframe = document.createElement('iframe');
     iframe.title = 'Mapa – AUTO MM Servis, Pasienková 66, Bratislava';
     iframe.loading = 'lazy';
     iframe.referrerPolicy = 'no-referrer-when-downgrade';
     iframe.src = 'https://maps.google.com/maps?q=AUTO%20MM%20Servis%2C%20Pasienkov%C3%A1%2066%2C%20Bratislava&z=16&output=embed';
-    box.replaceChildren(iframe);
-    box.classList.add('loaded');
+    mapBox.replaceChildren(iframe);
+    mapBox.classList.add('loaded');
+  }
+  function unloadMap() {                               // súhlas odvolaný: mapu hneď odstrániť
+    if (!mapBox.classList.contains('loaded')) return;
+    mapBox.replaceChildren(...mapPlaceholder);
+    mapBox.classList.remove('loaded');
+  }
+  $('map-load').addEventListener('click', loadMap);
+  let mapWatch = null;
+  function loadMapWhenVisible() {
+    if (!('IntersectionObserver' in window)) { loadMap(); return; }
+    mapWatch?.disconnect();
+    mapWatch = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { mapWatch.disconnect(); loadMap(); }
+    }, { rootMargin: '300px' });
+    mapWatch.observe(mapBox);
+  }
+  if (window.AutoMMConsent && window.AutoMMConsent.maps) loadMapWhenVisible();
+  window.addEventListener('automm:consent', (e) => {
+    if (e.detail.maps) loadMapWhenVisible();
+    else { mapWatch?.disconnect(); unloadMap(); }
   });
 
   /* ---------- mobilný panel akcií: skryť v úvode 3D scény ---------- */

@@ -24,12 +24,12 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="stylesheet" href="style.css?v=17">
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        "three": "./vendor/three/three.module.js",
+        "three/addons/": "./vendor/three/addons/"
       }
     }
   </script>
@@ -278,7 +278,7 @@
             <label>Poznámka (nepovinné)<textarea name="poznamka" rows="3" maxlength="1000" placeholder="Čo vás trápi? Napr. pískajú brzdy, svieti kontrolka motora…"></textarea></label>
             <!-- ochrana proti spamu: ľudia toto pole nevidia, roboty ho vyplnia -->
             <div class="hp" aria-hidden="true"><label>Web stránka<input name="web" tabindex="-1" autocomplete="off"></label></div>
-            <p class="form-legal">Údaje použijeme len na vybavenie vašej objednávky. Viac v <a href="ochrana-osobnych-udajov.html">zásadách ochrany osobných údajov</a>.</p>
+            <p class="form-legal">Objednávka je nezáväzná žiadosť o termín – platí až naše potvrdenie (<a href="obchodne-podmienky.html">obchodné podmienky</a>). Údaje použijeme len na vybavenie objednávky a po 12 mesiacoch od termínu ich anonymizujeme. Viac v <a href="ochrana-osobnych-udajov.html">zásadách ochrany osobných údajov</a>.</p>
             <p class="form-error" id="booking-error" role="alert" hidden></p>
             <button class="btn btn-white btn-lg" type="submit" id="booking-submit">Odoslať objednávku</button>
           </form>
@@ -311,7 +311,7 @@
             <div><dt>Otváracie hodiny</dt><dd data-hours>Po – Pi: [doplniť]<br>So – Ne: [doplniť]</dd></div>
           </dl>
           <div class="map-consent" id="map">
-            <p>Mapu načítame až po vašom kliknutí. Zobrazením mapy sa prenesú údaje do spoločnosti Google.</p>
+            <p>Mapu Google načítame až po vašom kliknutí. Google Ireland Ltd. pri tom získa vašu IP adresu a môže uložiť cookies. <a href="cookies.html">Viac o cookies</a></p>
             <button class="btn btn-white" id="map-load" type="button">Zobraziť mapu</button>
           </div>
           <a class="btn btn-ghost btn-block" href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Navigovať do servisu</a>
@@ -324,20 +324,20 @@
     <div class="wrap footer-grid">
       <div>
         <strong class="footer-name">AUTO MM Servis</strong>
-        <p>Pasienková 66, 821 06 Bratislava<br><a href="tel:+421917973170">0917 973 170</a></p>
+        <p>Prevádzka: Pasienková 66, 821 06 Bratislava<br>Tel.: <a href="tel:+421917973170">0917 973 170</a><br>E-mail: [doplniť]</p>
       </div>
       <div>
         <strong>Prevádzkovateľ</strong>
-        <p>[Obchodné meno, sídlo]<br>IČO: [doplniť] · DIČ: [doplniť]<br>IČ DPH: [doplniť]<br>[Zapísaný v OR OS Bratislava III, oddiel/vložka – alebo ŽR]</p>
+        <p>[Obchodné meno]<br>Sídlo: [doplniť]<br>IČO: [doplniť] · DIČ: [doplniť]<br>IČ DPH: [doplniť – alebo „nie je platiteľom DPH“]<br>[Zapísaný v Obchodnom registri Mestského súdu Bratislava III, oddiel: Sro, vložka č. … – alebo: zapísaný v Živnostenskom registri Okresného úradu Bratislava, č. …]</p>
       </div>
       <div>
         <strong>Informácie</strong>
-        <p><a href="ochrana-osobnych-udajov.html">Ochrana osobných údajov</a><br>Tento web nepoužíva cookies.<br>Orgán dozoru: <a href="https://www.soi.sk" target="_blank" rel="noopener">SOI</a></p>
+        <p><a href="obchodne-podmienky.html">Obchodné podmienky</a><br><a href="ochrana-osobnych-udajov.html">Ochrana osobných údajov</a><br><a href="cookies.html">Cookies</a> · <button type="button" class="linklike" data-cookie-settings>Nastavenia cookies</button><br>Orgán dozoru: Slovenská obchodná inšpekcia, Inšpektorát SOI pre Bratislavský kraj, Bajkalská 21/A, P. O. BOX 5, 820 07 Bratislava (<a href="https://www.soi.sk" target="_blank" rel="noopener">soi.sk</a>)</p>
       </div>
     </div>
     <div class="wrap footer-row">
       <span>© 2026 AUTO MM Servis</span>
-      <span class="credit">3D model „Audi RS5“ od <a href="https://sketchfab.com/WillisChiejina" target="_blank" rel="noopener">WillisChiejina</a> (<a href="https://sketchfab.com/3d-models/audi-rs5-75d636ab26b1423ca61ffd0fd758fd0a" target="_blank" rel="noopener">Sketchfab</a>), licencia <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>, upravené (odstránené logá, zjednodušené).</span>
+      <span class="credit">3D model „Audi RS5“ (autor: <a href="https://sketchfab.com/WillisChiejina" target="_blank" rel="noopener">WillisChiejina</a>, zdroj: <a href="https://sketchfab.com/3d-models/audi-rs5-75d636ab26b1423ca61ffd0fd758fd0a" target="_blank" rel="noopener">Sketchfab</a>), licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.sk" target="_blank" rel="noopener">CC BY 4.0</a>; upravené: odstránené logá, zmenená farba a materiály, zjednodušené. Garáž, zdvihák a kolesá: vlastná tvorba.</span>
     </div>
   </footer>
 
@@ -348,8 +348,9 @@
     <a href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Navigovať</a>
   </nav>
 
-  <script src="data.js?v=16"></script>
-  <script type="module" src="app.js?v=16"></script>
-  <script src="site.js?v=16" defer></script>
+  <script src="data.js?v=17"></script>
+  <script type="module" src="app.js?v=17"></script>
+  <script src="consent.js?v=17" defer></script>
+  <script src="site.js?v=17" defer></script>
 </body>
 </html>

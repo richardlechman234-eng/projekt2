@@ -1,6 +1,7 @@
 /* AUTO MM Servis – admin panel rezervácií (Supabase Auth + RLS).
    Verejný kľúč z data.js stačí: bez prihlásenia admina databáza nič neukáže. */
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm';
+// supabase-js 2.49.4 je uložená priamo na webe (vendor/supabase.js), nič sa nenačítava z cudzích serverov
+const { createClient } = window.supabase;
 
 const CFG = window.AUTO_MM.supabase;
 const sb = createClient(CFG.url, CFG.publishableKey, {
@@ -155,13 +156,14 @@ function card(r) {
     h('div', { class: 'res-head' },
       isNew(r) && h('span', { class: 'pill pill-new' }, 'NOVÁ'),
       h('span', { class: `pill pill-${r.stav}` }, r.stav === 'caka' && r.navrhnuty_datum ? 'Navrhnutý iný termín' : STAV[r.stav]),
+      r.anonymizovane && h('span', { class: 'pill pill-zrusena' }, 'Anonymizované (GDPR)'),
       h('span', { class: 'res-id' }, `#${r.id}`)
     ),
     h('h2', { class: 'res-service' }, r.sluzba),
     h('p', { class: `res-when${past ? ' past' : ''}` }, `${skDate(r.datum)} · ${timeText(r)}`, past && h('small', {}, ' (termín uplynul)')),
     r.navrhnuty_datum && h('p', { class: 'res-proposal' }, `Navrhnuté: ${skDate(r.navrhnuty_datum)}${r.navrhnuty_cas ? ` · ${r.navrhnuty_cas}` : ''}`),
     h('p', { class: 'res-name' }, r.meno),
-    h('div', { class: 'res-contact' },
+    !r.anonymizovane && h('div', { class: 'res-contact' },
       h('a', { class: 'btn btn-blue btn-sm', href: `tel:${tel}` }, '📞 ', r.telefon),
       h('a', { class: 'btn btn-ghost btn-sm', href: `mailto:${r.email}` }, '✉ ', r.email)
     ),
@@ -173,7 +175,9 @@ function card(r) {
     ),
     h('p', { class: 'res-meta' }, `Prijaté ${ago(r.vytvorene)} (${new Date(r.vytvorene).toLocaleString('sk-SK', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' })})`,
       r.email_odoslany ? ` · e-mail zákazníkovi ${ago(r.email_odoslany)}` : ''),
-    h('div', { class: 'res-actions' },
+    r.anonymizovane ? h('div', { class: 'res-actions' },
+      h('button', { type: 'button', class: 'btn btn-danger', onclick: () => actDelete(r) }, 'Vymazať')
+    ) : h('div', { class: 'res-actions' },
       h('button', { type: 'button', class: 'btn btn-white', disabled: r.stav === 'potvrdena', onclick: () => actConfirm(r) }, 'Potvrdiť'),
       h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => actPropose(r) }, 'Iný termín'),
       h('button', { type: 'button', class: 'btn btn-ghost', disabled: r.stav === 'dokoncena', onclick: () => actDone(r) }, 'Dokončené'),
