@@ -1,356 +1,711 @@
 <!doctype html>
 <html lang="sk">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a0202">
-  <title>AUTO MM Servis – autoservis Bratislava, Podunajské Biskupice</title>
-  <meta name="description" content="Autoservis AUTO MM Servis, Pasienková 66, Bratislava – Podunajské Biskupice. Servis, pneuservis, brzdy, klimatizácia, diagnostika. Hodnotenie 4,6 na Google. Tel. 0917 973 170.">
-  <link rel="canonical" href="https://richardlechman234-eng.github.io/projekt2/">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="sk_SK">
-  <meta property="og:site_name" content="AUTO MM Servis">
-  <meta property="og:title" content="AUTO MM Servis – autoservis Bratislava, Podunajské Biskupice">
-  <meta property="og:description" content="Servis, pneuservis, brzdy, klimatizácia a diagnostika. Pasienková 66, Bratislava. Tel. 0917 973 170.">
-  <meta property="og:url" content="https://richardlechman234-eng.github.io/projekt2/">
-  <meta property="og:image" content="https://richardlechman234-eng.github.io/projekt2/assets/og-image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="AUTO MM Servis – modré auto v garáži, Pasienková 66, Bratislava, tel. 0917 973 170">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=17">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "./vendor/three/three.module.js",
-        "three/addons/": "./vendor/three/addons/"
+  <head>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-y94z5V04bErnbVl00IeevgEgQQ/N9Mvan05craZrDtA='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob: https://erjopcachzansloyywas.supabase.co; frame-src https://maps.google.com https://www.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0202" />
+    <title>Autoservis Bratislava Podunajské Biskupice | AUTO MM Servis</title>
+    <meta
+      name="description"
+      content="Autoservis na Pasienkovej 66 v Podunajských Biskupiciach: pneuservis, brzdy, klimatizácia, diagnostika a servis. Objednajte sa na 0917 973 170."
+    />
+    <link rel="canonical" href="https://richardlechman234-eng.github.io/projekt2/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sk_SK" />
+    <meta property="og:site_name" content="AUTO MM Servis" />
+    <meta
+      property="og:title"
+      content="Autoservis Bratislava Podunajské Biskupice | AUTO MM Servis"
+    />
+    <meta
+      property="og:description"
+      content="Autoservis na Pasienkovej 66 v Podunajských Biskupiciach: pneuservis, brzdy, klimatizácia, diagnostika a servis. Objednajte sa na 0917 973 170."
+    />
+    <meta property="og:url" content="https://richardlechman234-eng.github.io/projekt2/" />
+    <meta
+      property="og:image"
+      content="https://richardlechman234-eng.github.io/projekt2/assets/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="AUTO MM Servis – modré auto v garáži, Pasienková 66, Bratislava, tel. 0917 973 170"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Autoservis Bratislava Podunajské Biskupice | AUTO MM Servis"
+    />
+    <meta
+      name="twitter:description"
+      content="Autoservis na Pasienkovej 66 v Podunajských Biskupiciach: pneuservis, brzdy, klimatizácia, diagnostika a servis. Objednajte sa na 0917 973 170."
+    />
+    <meta
+      name="twitter:image"
+      content="https://richardlechman234-eng.github.io/projekt2/assets/og-image.jpg"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link
+      rel="preload"
+      href="assets/fonts/inter-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/spacegrotesk-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="style.css?v=20" />
+    <link rel="modulepreload" href="vendor/three/three.module.min.js?v=20" />
+    <link rel="preload" href="assets/car.glb?v=20" as="fetch" crossorigin />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three/three.module.min.js?v=20",
+          "three/addons/": "./vendor/three/addons/"
+        }
       }
-    }
-  </script>
-  <!-- Štruktúrované dáta pre Google (lokálne vyhľadávanie, Mapy) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "AutoRepair",
-    "name": "AUTO MM Servis",
-    "url": "https://richardlechman234-eng.github.io/projekt2/",
-    "telephone": "+421917973170",
-    "priceRange": "€€",
-    "currenciesAccepted": "EUR",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Pasienková 66",
-      "postalCode": "821 06",
-      "addressLocality": "Bratislava",
-      "addressRegion": "Bratislavský kraj",
-      "addressCountry": "SK"
-    },
-    "geo": { "@type": "GeoCoordinates", "latitude": 48.1267703, "longitude": 17.2029212 },
-    "hasMap": "https://www.google.com/maps/search/?api=1&query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava",
-    "areaServed": ["Bratislava", "Podunajské Biskupice", "Ružinov", "Vrakuňa"]
-  }
-  </script>
-</head>
-<body>
-  <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
+    </script>
+    <!-- Štruktúrované dáta pre Google (lokálne vyhľadávanie, Mapy) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "AutoRepair",
+        "@id": "https://richardlechman234-eng.github.io/projekt2/#autoservis",
+        "name": "AUTO MM Servis",
+        "description": "Autoservis v Bratislave – Podunajských Biskupiciach: pneuservis, brzdy, klimatizácia, diagnostika a servis.",
+        "url": "https://richardlechman234-eng.github.io/projekt2/",
+        "image": "https://richardlechman234-eng.github.io/projekt2/assets/og-image.jpg",
+        "telephone": "+421917973170",
+        "currenciesAccepted": "EUR",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Pasienková 66",
+          "postalCode": "821 06",
+          "addressLocality": "Bratislava",
+          "addressRegion": "Bratislavský kraj",
+          "addressCountry": "SK"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 48.1267703, "longitude": 17.2029212 },
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava",
+        "areaServed": [
+          { "@type": "City", "name": "Bratislava" },
+          { "@type": "AdministrativeArea", "name": "Podunajské Biskupice" }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
 
-  <header class="topbar">
-    <a class="brand" id="brand" href="#top" aria-label="AUTO MM Servis – na začiatok" tabindex="-1"><span id="brand-text">AUTO MM Servis</span></a>
-    <div class="topbar-actions">
-      <a class="btn btn-white top-book" href="#objednavka">Objednať sa</a>
-      <div class="contact-wrap">
-        <button class="btn btn-blue" id="contact-btn" aria-expanded="false" aria-controls="contact-pop">Kontakt</button>
-        <div class="contact-pop" id="contact-pop" role="dialog" aria-label="Kontaktné údaje" hidden>
-          <p class="open-status" data-open-status hidden></p>
-          <dl>
-            <div><dt>Adresa</dt><dd><a class="maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Pasienková 66<br>821 06 Bratislava – Podunajské Biskupice</a><span class="maps-hint">Otvoriť v Google Mapách ↗</span></dd></div>
-            <div><dt>Telefón</dt><dd><a href="tel:+421917973170">0917 973 170</a></dd></div>
-            <div><dt>Otváracie hodiny</dt><dd data-hours>Po – Pi: [doplniť]<br>So – Ne: [doplniť]</dd></div>
-          </dl>
-          <div class="pop-actions">
-            <a class="btn btn-white" href="tel:+421917973170">Zavolať</a>
-            <a class="btn btn-ghost" href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Navigovať</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main id="top">
-    <!-- 3D zážitok: auto na celú obrazovku, jedným potiahnutím prejde k službám -->
-    <section class="experience" id="experience" aria-label="3D auto a služby">
-      <div class="stage">
-        <canvas id="scene" aria-hidden="true"></canvas>
-
-        <div class="loader" id="loader" role="status">
-          <span class="loader-bar"><span id="loader-fill"></span></span>
-          <span id="loader-text">Načítavam 3D model…</span>
-        </div>
-
-        <div class="intro" id="intro">
-          <p class="eyebrow fade">Autoservis · Podunajské Biskupice</p>
-          <h1 id="hero-title">AUTO MM Servis</h1>
-          <p class="rating fade"><span aria-hidden="true">★</span> 4,6 z 5 · 20 recenzií na Google</p>
-          <button class="scroll-hint fade" id="go-services" type="button"><span aria-hidden="true"></span>Scrollujte</button>
-        </div>
-
-        <div class="hotspots" id="hotspots"></div>
-
-        <div class="services-ui" id="services-ui">
-          <h2>Naše služby</h2>
-          <p>Kliknite na časť auta alebo vyberte službu</p>
-          <div class="chips" id="chips" role="list"></div>
-        </div>
-
-        <aside class="service-panel" id="panel" aria-live="polite" hidden>
-          <button class="panel-close" id="panel-close" aria-label="Zavrieť a vrátiť sa k autu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    <header class="topbar">
+      <a
+        class="brand"
+        id="brand"
+        href="#top"
+        aria-label="AUTO MM Servis – na začiatok"
+        tabindex="-1"
+        ><span id="brand-text">AUTO MM Servis</span></a
+      >
+      <div class="topbar-actions">
+        <a class="btn btn-white top-book" href="#objednavka">Objednať sa</a>
+        <div class="contact-wrap">
+          <button
+            class="btn btn-blue"
+            id="contact-btn"
+            aria-expanded="false"
+            aria-controls="contact-pop"
+          >
+            Kontakt
           </button>
-          <p class="panel-kicker">Služba</p>
-          <h3 id="panel-title"></h3>
-          <p id="panel-desc"></p>
-          <ul id="panel-list"></ul>
-          <p class="panel-price"><span>Cena s DPH</span><strong id="panel-price"></strong></p>
-          <div class="panel-actions">
-            <a class="btn btn-white btn-block" id="panel-book" href="#objednavka">Objednať túto službu</a>
-            <a class="btn btn-ghost btn-block" href="tel:+421917973170">Zavolať 0917 973 170</a>
+          <div
+            class="contact-pop"
+            id="contact-pop"
+            role="dialog"
+            aria-label="Kontaktné údaje"
+            hidden
+          >
+            <p class="open-status" data-open-status hidden></p>
+            <dl>
+              <div>
+                <dt>Adresa</dt>
+                <dd>
+                  <a
+                    class="maps-link"
+                    href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+                    target="_blank"
+                    rel="noopener"
+                    >Pasienková 66<br />821 06 Bratislava – Podunajské Biskupice</a
+                  ><span class="maps-hint">Otvoriť v Google Mapách ↗</span>
+                </dd>
+              </div>
+              <div>
+                <dt>Telefón</dt>
+                <dd><a href="tel:+421917973170">0917 973 170</a></dd>
+              </div>
+              <div>
+                <dt>Otváracie hodiny</dt>
+                <dd data-hours>Po – Pi: [doplniť]<br />So – Ne: [doplniť]</dd>
+              </div>
+            </dl>
+            <div class="pop-actions">
+              <a class="btn btn-white" href="tel:+421917973170">Zavolať</a>
+              <a
+                class="btn btn-ghost"
+                href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+                target="_blank"
+                rel="noopener"
+                >Navigovať</a
+              >
+            </div>
           </div>
-        </aside>
-
-        <!-- náhrada, keď sa 3D nedá zobraziť (vypnutý WebGL, slabý mobil, model sa nenačíta) -->
-        <div class="fallback" id="fallback" hidden>
-          <h2>Naše služby</h2>
-          <p id="fallback-msg">Vyberte službu a objednajte sa:</p>
-          <div class="chips" id="fallback-chips" role="list"></div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <div id="obsah"></div>
+    <main id="top">
+      <!-- 3D zážitok: auto na celú obrazovku, jedným potiahnutím prejde k službám -->
+      <section class="experience" id="experience" aria-label="3D auto a služby">
+        <div class="stage">
+          <canvas id="scene" aria-hidden="true"></canvas>
 
-    <!-- Pás dôvery hneď pod úvodom -->
-    <section class="trust" aria-label="Prečo AUTO MM Servis">
-      <div class="wrap trust-row">
-        <div class="trust-item"><strong>4,6 <span aria-hidden="true">★</span></strong><span>20 recenzií na Google</span></div>
-        <div class="trust-item"><strong>Všetky značky</strong><span>osobné autá [potvrdiť]</span></div>
-        <div class="trust-item"><strong>Cena vopred</strong><span>bez opravy navyše bez súhlasu</span></div>
-        <div class="trust-item"><strong>Ceny s DPH</strong><span>doklad z eKasy pri každej platbe</span></div>
-      </div>
-    </section>
+          <div class="loader" id="loader" role="status">
+            <span class="loader-bar"><span id="loader-fill"></span></span>
+            <span id="loader-text">Načítavam 3D model…</span>
+          </div>
 
-    <!-- Ako to funguje: 4 kroky -->
-    <section class="section section-dark" id="postup" aria-labelledby="postup-title">
-      <div class="wrap">
-        <p class="eyebrow">Ako to funguje</p>
-        <h2 id="postup-title">Od telefonátu po hotové auto</h2>
-        <ol class="steps">
-          <li><span class="step-num">01</span><h3>Objednáte sa</h3><p>Zavolajte alebo vyplňte krátky formulár. Dohodneme termín, ktorý vám vyhovuje.</p></li>
-          <li><span class="step-num">02</span><h3>Diagnostika a cena</h3><p>Auto skontrolujeme a povieme vám presnú cenu. Bez vášho súhlasu nič navyše nerobíme.</p></li>
-          <li><span class="step-num">03</span><h3>Oprava</h3><p>Opravíme dohodnuté, s kvalitnými dielmi. Výmenu zapíšeme do servisnej knižky.</p></li>
-          <li><span class="step-num">04</span><h3>Vyzdvihnutie</h3><p>Zavoláme vám, keď je auto hotové. Ukážeme, čo sme vymenili, a dostanete doklad.</p></li>
-        </ol>
-      </div>
-    </section>
+          <div class="intro" id="intro">
+            <p class="eyebrow fade">Autoservis · Podunajské Biskupice</p>
+            <h1 id="hero-title">AUTO MM Servis</h1>
+            <!-- TODO(owner): confirm 4,6 / 20 -->
+            <p class="rating fade">
+              <span aria-hidden="true">★</span> 4,6 z 5 · 20 recenzií na Google
+            </p>
+            <button class="scroll-hint fade" id="go-services" type="button">
+              <span aria-hidden="true"></span>Posuňte nižšie
+            </button>
+          </div>
 
-    <section class="section section-blue" id="o-nas" aria-labelledby="onas-title">
-      <div class="wrap split">
-        <div>
-          <p class="eyebrow">O nás</p>
-          <h2 id="onas-title">Servis na Pasienkovej ulici</h2>
-          <p class="lead">[Doplniť: kto servis vedie, ako dlho funguje, na aké značky sa špecializuje.]</p>
-          <ul class="checks">
-            <li>[Výhoda 1, napr. férové ceny]</li>
-            <li>[Výhoda 2, napr. rýchle termíny]</li>
-            <li>[Výhoda 3]</li>
-          </ul>
+          <div class="hotspots" id="hotspots"></div>
+
+          <div class="services-ui" id="services-ui">
+            <h2>Naše služby</h2>
+            <p>Kliknite na časť auta alebo vyberte službu</p>
+            <div class="chips" id="chips" role="group" aria-label="Služby"></div>
+          </div>
+
+          <aside
+            class="service-panel"
+            id="panel"
+            role="dialog"
+            aria-modal="false"
+            aria-labelledby="panel-title"
+            hidden
+          >
+            <button class="panel-close" id="panel-close" aria-label="Zavrieť a vrátiť sa k autu">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+            <p class="panel-kicker">Služba</p>
+            <h3 id="panel-title"></h3>
+            <p id="panel-desc"></p>
+            <ul id="panel-list"></ul>
+            <div class="panel-actions">
+              <p class="panel-price"><span>Cena s DPH</span><strong id="panel-price"></strong></p>
+              <a class="btn btn-white btn-block" id="panel-book" href="#objednavka"
+                >Objednať túto službu</a
+              >
+              <a class="btn btn-ghost btn-block" href="tel:+421917973170">Zavolať 0917 973 170</a>
+            </div>
+          </aside>
+
+          <!-- náhrada, keď sa 3D nedá zobraziť (vypnutý WebGL, slabý mobil, model sa nenačíta) -->
+          <div class="fallback" id="fallback" hidden>
+            <h2>Naše služby</h2>
+            <p id="fallback-msg">Vyberte službu a objednajte sa:</p>
+            <div class="chips" id="fallback-chips" role="group" aria-label="Služby"></div>
+          </div>
         </div>
-        <div class="photo-ph" role="img" aria-label="Miesto pre fotku prevádzky">Fotka prevádzky</div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Cenník: generuje sa z rovnakých dát ako balóny na aute -->
-    <section class="section section-dark" id="cennik" aria-labelledby="cennik-title">
-      <div class="wrap">
-        <div class="section-head">
+      <div id="obsah" tabindex="-1"></div>
+
+      <!-- Pás dôvery hneď pod úvodom -->
+      <section class="trust" aria-label="Prečo AUTO MM Servis">
+        <div class="wrap trust-row">
+          <!-- TODO(owner): confirm 4,6 / 20 -->
+          <div class="trust-item">
+            <strong>4,6 <span aria-hidden="true">★</span></strong
+            ><span>20 recenzií na Google</span>
+          </div>
+          <div class="trust-item">
+            <strong>Všetky značky</strong><span>osobné autá [potvrdiť]</span>
+          </div>
+          <div class="trust-item">
+            <strong>Cena vopred</strong><span>bez opravy navyše bez súhlasu</span>
+          </div>
+          <div class="trust-item">
+            <strong>Ceny s DPH</strong><span>doklad z eKasy pri každej platbe</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ako to funguje: 4 kroky -->
+      <section class="section section-dark" id="postup" aria-labelledby="postup-title">
+        <div class="wrap">
+          <p class="eyebrow">Ako to funguje</p>
+          <h2 id="postup-title">Od telefonátu po hotové auto</h2>
+          <ol class="steps">
+            <li>
+              <span class="step-num">01</span>
+              <h3>Objednáte sa</h3>
+              <p>Zavolajte alebo vyplňte krátky formulár. Dohodneme termín, ktorý vám vyhovuje.</p>
+            </li>
+            <li>
+              <span class="step-num">02</span>
+              <h3>Diagnostika a cena</h3>
+              <p>
+                Auto skontrolujeme a po diagnostike dostanete presnú cenu ešte pred opravou. Bez
+                vášho súhlasu nič navyše nerobíme.
+              </p>
+            </li>
+            <li>
+              <span class="step-num">03</span>
+              <h3>Oprava</h3>
+              <!-- TODO(owner): confirm "zápis do servisnej knižky" -->
+              <p>
+                Opravíme dohodnuté práce a použijeme kvalitné diely. Výmenu zapíšeme do servisnej
+                knižky.
+              </p>
+            </li>
+            <li>
+              <span class="step-num">04</span>
+              <h3>Vyzdvihnutie</h3>
+              <p>Zavoláme vám, keď je auto hotové. Ukážeme, čo sme vymenili, a dostanete doklad.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section section-blue" id="o-nas" aria-labelledby="onas-title">
+        <div class="wrap split">
           <div>
-            <p class="eyebrow">Cenník</p>
-            <h2 id="cennik-title">Orientačné ceny</h2>
+            <p class="eyebrow">O nás</p>
+            <h2 id="onas-title">Servis na Pasienkovej ulici</h2>
+            <!-- TODO(owner): kto servis vedie, ako dlho funguje, na aké značky sa špecializuje (len reálne fakty); upraviť/rozšíriť zoznam výhod -->
+            <p class="lead">
+              AUTO MM Servis je autoservis na Pasienkovej ulici v Podunajských Biskupiciach v
+              Bratislave. Opravu alebo servis auta dohodnete telefonicky alebo cez formulár.
+            </p>
+            <ul class="checks">
+              <li>Objednáte sa telefonicky alebo cez online formulár</li>
+              <li>Presnú cenu dostanete po diagnostike, ešte pred opravou</li>
+              <li>Bez vášho súhlasu nič navyše nerobíme</li>
+            </ul>
           </div>
-          <p class="note">Všetky ceny sú uvedené v eurách vrátane DPH. Presnú cenu vám povieme po diagnostike, ešte pred opravou.</p>
+          <div class="photo-ph" role="img" aria-label="Miesto pre fotku prevádzky">
+            Fotka prevádzky
+          </div>
         </div>
-        <div class="price-table" role="table" aria-label="Cenník služieb">
-          <div class="price-row price-head" role="row"><span role="columnheader">Služba</span><span role="columnheader">Čo zahŕňa</span><span role="columnheader">Cena od</span></div>
-          <div id="price-rows" role="rowgroup"></div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section section-dark section-tight" id="recenzie" aria-labelledby="rec-title">
-      <div class="wrap">
-        <div class="section-head">
+      <!-- Cenník: generuje sa z rovnakých dát ako balóny na aute -->
+      <section class="section section-dark" id="cennik" aria-labelledby="cennik-title">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Cenník</p>
+              <h2 id="cennik-title">Orientačné ceny</h2>
+            </div>
+            <p class="note">
+              Všetky ceny sú uvedené v eurách vrátane DPH. Presnú cenu vám povieme po diagnostike,
+              ešte pred opravou.
+            </p>
+          </div>
+          <div class="price-table" role="table" aria-label="Cenník služieb">
+            <div class="price-row price-head" role="row">
+              <span role="columnheader">Služba</span><span role="columnheader">Čo zahŕňa</span
+              ><span role="columnheader">Cena od</span>
+            </div>
+            <div id="price-rows" role="rowgroup">
+              <!-- services:start -->
+          <div class="price-row" role="row" data-id="pneuservis"><span role="cell" class="p-name">Prezúvanie pneumatík</span><span role="cell" class="p-items">Prezutie letných / zimných pneumatík · Vyváženie kolies · Oprava defektu</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Prezúvanie pneumatík">Objednať</a></span></div>
+          <div class="price-row" role="row" data-id="brzdy"><span role="cell" class="p-name">Brzdy</span><span role="cell" class="p-items">Výmena brzdových platničiek · Výmena brzdových kotúčov · Výmena brzdovej kvapaliny · Kontrola brzdovej sústavy</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Brzdy">Objednať</a></span></div>
+          <div class="price-row" role="row" data-id="motor"><span role="cell" class="p-name">Motor a olej</span><span role="cell" class="p-items">Výmena oleja a filtrov · Servisná prehliadka · Výmena rozvodov · Opravy motora</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Motor a olej">Objednať</a></span></div>
+          <div class="price-row" role="row" data-id="svetla"><span role="cell" class="p-name">Svetlá a elektrika</span><span role="cell" class="p-items">Nastavenie svetlometov · Výmena žiaroviek · Kontrola a výmena autobatérie · Opravy elektroinštalácie</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Svetlá a elektrika">Objednať</a></span></div>
+          <div class="price-row" role="row" data-id="klimatizacia"><span role="cell" class="p-name">Klimatizácia</span><span role="cell" class="p-items">Plnenie klimatizácie · Dezinfekcia a čistenie · Výmena kabínového filtra · Kontrola tesnosti</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Klimatizácia">Objednať</a></span></div>
+          <div class="price-row" role="row" data-id="diagnostika"><span role="cell" class="p-name">Diagnostika</span><span role="cell" class="p-items">Diagnostika riadiacich jednotiek · Vyčítanie a mazanie chýb · Kontrola pred kúpou auta</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Diagnostika">Objednať</a></span></div>
+          <div class="price-row" role="row" data-id="vyfuk"><span role="cell" class="p-name">Výfuk</span><span role="cell" class="p-items">Výmena tlmičov výfuku · Opravy výfukového potrubia · Kontrola úniku spalín</span><span role="cell" class="p-price">od [doplniť] €<a class="p-book" href="#objednavka" aria-label="Objednať: Výfuk">Objednať</a></span></div>
+          <!-- services:end -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-dark section-tight" id="recenzie" aria-labelledby="rec-title">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Recenzie</p>
+              <h2 id="rec-title">Čo hovoria zákazníci</h2>
+            </div>
+            <!-- TODO(owner): confirm 4,6 / 20 -->
+            <p class="rating-big">
+              <strong>4,6</strong><span class="stars" aria-hidden="true">★★★★★</span
+              ><span>20 recenzií na Google</span>
+            </p>
+          </div>
+          <!-- TODO(owner): real reviews with consent -->
+          <p class="note review-note">
+            Hodnotenie vychádza z recenzií zákazníkov na Google. Prečítajte si ich priamo na Google
+            Mapách.
+          </p>
+          <div class="row-actions">
+            <a
+              class="btn btn-ghost"
+              href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+              target="_blank"
+              rel="noopener"
+              >Všetky recenzie na Google</a
+            >
+            <a
+              class="btn btn-blue"
+              href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+              target="_blank"
+              rel="noopener"
+              >Napísať recenziu</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-dark section-tight" id="faq" aria-labelledby="faq-title">
+        <div class="wrap faq-wrap">
           <div>
-            <p class="eyebrow">Recenzie</p>
-            <h2 id="rec-title">Čo hovoria zákazníci</h2>
+            <p class="eyebrow">Časté otázky</p>
+            <h2 id="faq-title">Otázky a odpovede</h2>
           </div>
-          <p class="rating-big"><strong>4,6</strong><span class="stars" aria-hidden="true">★★★★★</span><span>20 recenzií na Google</span></p>
+          <div class="faq">
+            <details>
+              <summary>
+                Stratím záruku, ak servisujem nové auto u vás, a nie v autorizovanom servise?
+              </summary>
+              <p>
+                <!-- TODO(owner): potvrdiť právne znenie odpovedi o záruke -->
+                Nie. Záruku vám výrobca nemôže odmietnuť len preto, že servis robíte v nezávislom
+                servise, ak dodržíte servisný plán a použijete diely zodpovedajúcej kvality.
+              </p>
+            </details>
+            <details>
+              <summary>Musím sa objednať vopred?</summary>
+              <p>
+                <!-- TODO(owner): doplniť, či a kedy vybavíte aj bez objednania (na počkanie) -->
+                Odporúčame objednať sa telefonicky alebo cez formulár, aby sme vám dohodli termín.
+              </p>
+            </details>
+            <details>
+              <summary>Ako dlho trvá prezutie pneumatík?</summary>
+              <p>
+                [Doplniť: napr. Približne 30–45 minút. V sezóne (marec – apríl, október – november)
+                sa objednajte radšej vopred.]
+              </p>
+            </details>
+            <details>
+              <summary>Aké platby prijímate?</summary>
+              <p>
+                [Doplniť: hotovosť / platobná karta / faktúra pre firmy.] Pri každej platbe
+                dostanete doklad z eKasy.
+              </p>
+            </details>
+            <details>
+              <summary>Pripravíte mi auto na STK a emisnú kontrolu?</summary>
+              <p>[Doplniť: napr. Áno, auto pred STK a EK skontrolujeme a odstránime nedostatky.]</p>
+            </details>
+            <details>
+              <summary>Opravujete aj firemné vozidlá?</summary>
+              <p>[Doplniť: napr. Áno, vystavíme faktúru na firmu s IČO a IČ DPH.]</p>
+            </details>
+          </div>
         </div>
-        <div class="reviews">
-          <figure class="review"><span class="stars" aria-label="5 z 5 hviezdičiek">★★★★★</span><blockquote>[Citát z recenzie – vybrať so súhlasom autora]</blockquote><figcaption>[Meno zákazníka]</figcaption></figure>
-          <figure class="review"><span class="stars" aria-label="5 z 5 hviezdičiek">★★★★★</span><blockquote>[Citát z recenzie – vybrať so súhlasom autora]</blockquote><figcaption>[Meno zákazníka]</figcaption></figure>
-          <figure class="review"><span class="stars" aria-label="5 z 5 hviezdičiek">★★★★★</span><blockquote>[Citát z recenzie – vybrať so súhlasom autora]</blockquote><figcaption>[Meno zákazníka]</figcaption></figure>
-        </div>
-        <div class="row-actions">
-          <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Všetky recenzie na Google</a>
-          <a class="btn btn-blue" href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Napísať recenziu</a>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section section-dark section-tight" id="faq" aria-labelledby="faq-title">
-      <div class="wrap faq-wrap">
+      <!-- Objednávka + kontakt -->
+      <section class="section section-blue" id="objednavka" aria-labelledby="obj-title">
+        <div class="wrap split split-top">
+          <div>
+            <p class="eyebrow">Objednávka</p>
+            <h2 id="obj-title">Objednajte sa na servis</h2>
+            <p class="lead">
+              Vyplňte pár údajov a ozveme sa vám s termínom. Ak je to súrne, radšej zavolajte.
+            </p>
+            <form class="booking" id="booking" novalidate>
+              <label>Služba<select name="sluzba" id="booking-service" required></select></label>
+              <div class="field-row">
+                <label>Preferovaný dátum<input name="datum" type="date" required /></label>
+                <label
+                  >Čas<select name="cas" id="booking-time-type">
+                    <option value="dopoludnia">dopoludnia</option>
+                    <option value="popoludni">popoludní</option>
+                    <option value="jedno">je mi to jedno</option>
+                    <option value="konkretny">konkrétny čas…</option>
+                  </select></label
+                >
+              </div>
+              <label id="booking-time-wrap" hidden
+                >Konkrétny čas<input
+                  name="cas_presny"
+                  type="time"
+                  min="07:00"
+                  max="18:00"
+                  step="900"
+              /></label>
+              <div class="field-row">
+                <label
+                  >Meno a priezvisko<input name="meno" autocomplete="name" maxlength="100" required
+                /></label>
+                <label
+                  >Telefón<input
+                    name="telefon"
+                    type="tel"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    placeholder="09xx xxx xxx"
+                    maxlength="30"
+                    required
+                /></label>
+              </div>
+              <label
+                >E-mail<input
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  inputmode="email"
+                  placeholder="vas@email.sk"
+                  maxlength="200"
+                  required
+              /></label>
+              <div class="field-row">
+                <label
+                  >Značka a model auta<input
+                    name="auto"
+                    placeholder="napr. Škoda Octavia 2017"
+                    maxlength="100"
+                    required
+                /></label>
+                <label
+                  >ŠPZ (nepovinné)<input
+                    name="spz"
+                    placeholder="napr. BA123XY"
+                    maxlength="15"
+                    autocapitalize="characters"
+                /></label>
+              </div>
+              <label
+                >Poznámka (nepovinné)<textarea
+                  name="poznamka"
+                  rows="3"
+                  maxlength="1000"
+                  placeholder="Čo vás trápi? Napr. pískajú brzdy, svieti kontrolka motora…"
+                ></textarea>
+              </label>
+              <!-- ochrana proti spamu: ľudia toto pole nevidia, roboty ho vyplnia -->
+              <div class="hp" aria-hidden="true">
+                <label
+                  >Nevypĺňať<input name="kontakt_poznamka_2" tabindex="-1" autocomplete="off"
+                /></label>
+              </div>
+              <p class="form-legal">
+                Objednávka je nezáväzná žiadosť o termín – platí až naše potvrdenie (<a
+                  href="obchodne-podmienky.html"
+                  >obchodné podmienky</a
+                >). Údaje použijeme len na vybavenie objednávky a po 12 mesiacoch od termínu ich
+                anonymizujeme. Viac v
+                <a href="ochrana-osobnych-udajov.html">zásadách ochrany osobných údajov</a>.
+              </p>
+              <p class="form-error" id="booking-error" role="alert" hidden></p>
+              <button class="btn btn-white btn-lg" type="submit" id="booking-submit">
+                Odoslať objednávku
+              </button>
+            </form>
+            <div class="booking-done" id="booking-sent" hidden tabindex="-1" role="status">
+              <h3>Objednávka prijatá, ozveme sa vám s potvrdením termínu</h3>
+              <p id="booking-sent-text"></p>
+              <div class="row-actions">
+                <button class="btn btn-white" id="booking-again" type="button">
+                  Nová objednávka
+                </button>
+                <a class="btn btn-ghost" href="tel:+421917973170">Zavolať</a>
+              </div>
+            </div>
+            <div class="booking-done" id="booking-done" hidden tabindex="-1">
+              <h3>Objednávka je pripravená</h3>
+              <p id="booking-done-text"></p>
+              <pre id="booking-summary"></pre>
+              <div class="row-actions">
+                <a class="btn btn-white" id="booking-sms" href="sms:+421917973170">Odoslať SMS</a>
+                <button class="btn btn-ghost" id="booking-copy" type="button">
+                  Skopírovať text
+                </button>
+                <a class="btn btn-ghost" href="tel:+421917973170">Zavolať</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <h3>Kontakt</h3>
+            <p class="open-status" data-open-status hidden></p>
+            <dl>
+              <div>
+                <dt>Adresa</dt>
+                <dd>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+                    target="_blank"
+                    rel="noopener"
+                    >Pasienková 66, 821 06 Bratislava – Podunajské Biskupice</a
+                  >
+                </dd>
+              </div>
+              <div>
+                <dt>Telefón</dt>
+                <dd><a href="tel:+421917973170">0917 973 170</a></dd>
+              </div>
+              <div>
+                <dt>Otváracie hodiny</dt>
+                <dd data-hours>Po – Pi: [doplniť]<br />So – Ne: [doplniť]</dd>
+              </div>
+            </dl>
+            <div class="map-consent" id="map">
+              <p>
+                Mapu Google načítame až po vašom kliknutí. Google Ireland Ltd. pri tom získa vašu IP
+                adresu a môže uložiť cookies. <a href="cookies.html">Viac o cookies</a>
+              </p>
+              <button class="btn btn-white" id="map-load" type="button">Zobraziť mapu</button>
+            </div>
+            <a
+              class="btn btn-ghost btn-block"
+              href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+              target="_blank"
+              rel="noopener"
+              >Navigovať do servisu</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer-grid">
         <div>
-          <p class="eyebrow">Časté otázky</p>
-          <h2 id="faq-title">Otázky a odpovede</h2>
+          <strong class="footer-name">AUTO MM Servis</strong>
+          <p>
+            Prevádzka: Pasienková 66, 821 06 Bratislava<br />Tel.:
+            <a href="tel:+421917973170">0917 973 170</a><br />E-mail: [doplniť]
+          </p>
         </div>
-        <div class="faq">
-          <details>
-            <summary>Stratím záruku, ak servisujem nové auto u vás, a nie v autorizovanom servise?</summary>
-            <p>Nie. Podľa pravidiel EÚ (nariadenie Komisie č. 461/2010) vám výrobca nemôže odmietnuť záruku len preto, že ste pravidelný servis robili v nezávislom servise. Podmienkou je dodržanie servisného plánu výrobcu a použitie dielov zodpovedajúcej kvality. Servis vám zapíšeme do servisnej knižky. [potvrdiť]</p>
-          </details>
-          <details>
-            <summary>Musím sa objednať vopred?</summary>
-            <p>[Doplniť: napr. Odporúčame objednať sa telefonicky alebo cez formulár. Drobné úkony vieme často spraviť aj na počkanie.]</p>
-          </details>
-          <details>
-            <summary>Ako dlho trvá prezutie pneumatík?</summary>
-            <p>[Doplniť: napr. Približne 30–45 minút. V sezóne (marec – apríl, október – november) sa objednajte radšej vopred.]</p>
-          </details>
-          <details>
-            <summary>Aké platby prijímate?</summary>
-            <p>[Doplniť: hotovosť / platobná karta / faktúra pre firmy.] Pri každej platbe dostanete doklad z eKasy.</p>
-          </details>
-          <details>
-            <summary>Pripravíte mi auto na STK a emisnú kontrolu?</summary>
-            <p>[Doplniť: napr. Áno, auto pred STK a EK skontrolujeme a odstránime nedostatky.]</p>
-          </details>
-          <details>
-            <summary>Opravujete aj firemné vozidlá?</summary>
-            <p>[Doplniť: napr. Áno, vystavíme faktúru na firmu s IČO a IČ DPH.]</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- Objednávka + kontakt -->
-    <section class="section section-blue" id="objednavka" aria-labelledby="obj-title">
-      <div class="wrap split split-top">
         <div>
-          <p class="eyebrow">Objednávka</p>
-          <h2 id="obj-title">Objednajte sa na servis</h2>
-          <p class="lead">Vyplňte pár údajov a ozveme sa vám s termínom. Ak to súrne, radšej zavolajte.</p>
-          <form class="booking" id="booking" novalidate>
-            <label>Služba<select name="sluzba" id="booking-service" required></select></label>
-            <div class="field-row">
-              <label>Preferovaný dátum<input name="datum" type="date" required></label>
-              <label>Čas<select name="cas" id="booking-time-type">
-                <option value="dopoludnia">dopoludnia</option>
-                <option value="popoludni">popoludní</option>
-                <option value="jedno">je mi to jedno</option>
-                <option value="konkretny">konkrétny čas…</option>
-              </select></label>
-            </div>
-            <label id="booking-time-wrap" hidden>Konkrétny čas<input name="cas_presny" type="time" min="07:00" max="18:00" step="900"></label>
-            <div class="field-row">
-              <label>Meno a priezvisko<input name="meno" autocomplete="name" maxlength="100" required></label>
-              <label>Telefón<input name="telefon" type="tel" autocomplete="tel" inputmode="tel" placeholder="09xx xxx xxx" maxlength="30" required></label>
-            </div>
-            <label>E-mail<input name="email" type="email" autocomplete="email" inputmode="email" placeholder="vas@email.sk" maxlength="200" required></label>
-            <div class="field-row">
-              <label>Značka a model auta<input name="auto" placeholder="napr. Škoda Octavia 2017" maxlength="100" required></label>
-              <label>ŠPZ (nepovinné)<input name="spz" placeholder="napr. BA123XY" maxlength="15" autocapitalize="characters"></label>
-            </div>
-            <label>Poznámka (nepovinné)<textarea name="poznamka" rows="3" maxlength="1000" placeholder="Čo vás trápi? Napr. pískajú brzdy, svieti kontrolka motora…"></textarea></label>
-            <!-- ochrana proti spamu: ľudia toto pole nevidia, roboty ho vyplnia -->
-            <div class="hp" aria-hidden="true"><label>Web stránka<input name="web" tabindex="-1" autocomplete="off"></label></div>
-            <p class="form-legal">Objednávka je nezáväzná žiadosť o termín – platí až naše potvrdenie (<a href="obchodne-podmienky.html">obchodné podmienky</a>). Údaje použijeme len na vybavenie objednávky a po 12 mesiacoch od termínu ich anonymizujeme. Viac v <a href="ochrana-osobnych-udajov.html">zásadách ochrany osobných údajov</a>.</p>
-            <p class="form-error" id="booking-error" role="alert" hidden></p>
-            <button class="btn btn-white btn-lg" type="submit" id="booking-submit">Odoslať objednávku</button>
-          </form>
-          <div class="booking-done" id="booking-sent" hidden tabindex="-1" role="status">
-            <h3>Objednávka prijatá, ozveme sa vám s potvrdením termínu</h3>
-            <p id="booking-sent-text"></p>
-            <div class="row-actions">
-              <button class="btn btn-white" id="booking-again" type="button">Nová objednávka</button>
-              <a class="btn btn-ghost" href="tel:+421917973170">Zavolať</a>
-            </div>
-          </div>
-          <div class="booking-done" id="booking-done" hidden tabindex="-1">
-            <h3>Objednávka je pripravená</h3>
-            <p id="booking-done-text"></p>
-            <pre id="booking-summary"></pre>
-            <div class="row-actions">
-              <a class="btn btn-white" id="booking-sms" href="#">Odoslať SMS</a>
-              <button class="btn btn-ghost" id="booking-copy" type="button">Skopírovať text</button>
-              <a class="btn btn-ghost" href="tel:+421917973170">Zavolať</a>
-            </div>
-          </div>
+          <strong>Prevádzkovateľ</strong>
+          <p>
+            [Obchodné meno]<br />Sídlo: [doplniť]<br />IČO: [doplniť] · DIČ: [doplniť]<br />IČ DPH:
+            [doplniť – alebo „nie je platiteľom DPH“]<br />[Zapísaný v Obchodnom registri Mestského
+            súdu Bratislava III, oddiel: Sro, vložka č. … – alebo: zapísaný v Živnostenskom registri
+            Okresného úradu Bratislava, č. …]
+          </p>
         </div>
-
-        <div class="contact-card">
-          <h3>Kontakt</h3>
-          <p class="open-status" data-open-status hidden></p>
-          <dl>
-            <div><dt>Adresa</dt><dd><a href="https://www.google.com/maps/search/?api=1&amp;query=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Pasienková 66, 821 06 Bratislava – Podunajské Biskupice</a></dd></div>
-            <div><dt>Telefón</dt><dd><a href="tel:+421917973170">0917 973 170</a></dd></div>
-            <div><dt>Otváracie hodiny</dt><dd data-hours>Po – Pi: [doplniť]<br>So – Ne: [doplniť]</dd></div>
-          </dl>
-          <div class="map-consent" id="map">
-            <p>Mapu Google načítame až po vašom kliknutí. Google Ireland Ltd. pri tom získa vašu IP adresu a môže uložiť cookies. <a href="cookies.html">Viac o cookies</a></p>
-            <button class="btn btn-white" id="map-load" type="button">Zobraziť mapu</button>
-          </div>
-          <a class="btn btn-ghost btn-block" href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener">Navigovať do servisu</a>
+        <div>
+          <strong>Informácie</strong>
+          <p>
+            <a href="obchodne-podmienky.html">Obchodné podmienky</a><br /><a
+              href="ochrana-osobnych-udajov.html"
+              >Ochrana osobných údajov</a
+            ><br /><a href="cookies.html">Cookies</a> ·
+            <button type="button" class="linklike" data-cookie-settings>Nastavenia cookies</button
+            ><br />Orgán dozoru: Slovenská obchodná inšpekcia, Inšpektorát SOI pre Bratislavský
+            kraj, Bajkalská 21/A, P. O. BOX 5, 820 07 Bratislava (<a
+              href="https://www.soi.sk"
+              target="_blank"
+              rel="noopener"
+              >soi.sk</a
+            >)
+          </p>
         </div>
       </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="wrap footer-grid">
-      <div>
-        <strong class="footer-name">AUTO MM Servis</strong>
-        <p>Prevádzka: Pasienková 66, 821 06 Bratislava<br>Tel.: <a href="tel:+421917973170">0917 973 170</a><br>E-mail: [doplniť]</p>
+      <div class="wrap footer-row">
+        <span>© 2026 AUTO MM Servis</span>
+        <span class="credit"
+          >3D model „Audi RS5“ (autor:
+          <a href="https://sketchfab.com/WillisChiejina" target="_blank" rel="noopener"
+            >WillisChiejina</a
+          >, zdroj:
+          <a
+            href="https://sketchfab.com/3d-models/audi-rs5-75d636ab26b1423ca61ffd0fd758fd0a"
+            target="_blank"
+            rel="noopener"
+            >Sketchfab</a
+          >), licencia
+          <a
+            href="https://creativecommons.org/licenses/by/4.0/deed.sk"
+            target="_blank"
+            rel="noopener"
+            >CC BY 4.0</a
+          >; upravené: odstránené logá, zmenená farba a materiály, zjednodušené. Garáž, zdvihák a
+          kolesá: vlastná tvorba.</span
+        >
       </div>
-      <div>
-        <strong>Prevádzkovateľ</strong>
-        <p>[Obchodné meno]<br>Sídlo: [doplniť]<br>IČO: [doplniť] · DIČ: [doplniť]<br>IČ DPH: [doplniť – alebo „nie je platiteľom DPH“]<br>[Zapísaný v Obchodnom registri Mestského súdu Bratislava III, oddiel: Sro, vložka č. … – alebo: zapísaný v Živnostenskom registri Okresného úradu Bratislava, č. …]</p>
-      </div>
-      <div>
-        <strong>Informácie</strong>
-        <p><a href="obchodne-podmienky.html">Obchodné podmienky</a><br><a href="ochrana-osobnych-udajov.html">Ochrana osobných údajov</a><br><a href="cookies.html">Cookies</a> · <button type="button" class="linklike" data-cookie-settings>Nastavenia cookies</button><br>Orgán dozoru: Slovenská obchodná inšpekcia, Inšpektorát SOI pre Bratislavský kraj, Bajkalská 21/A, P. O. BOX 5, 820 07 Bratislava (<a href="https://www.soi.sk" target="_blank" rel="noopener">soi.sk</a>)</p>
-      </div>
-    </div>
-    <div class="wrap footer-row">
-      <span>© 2026 AUTO MM Servis</span>
-      <span class="credit">3D model „Audi RS5“ (autor: <a href="https://sketchfab.com/WillisChiejina" target="_blank" rel="noopener">WillisChiejina</a>, zdroj: <a href="https://sketchfab.com/3d-models/audi-rs5-75d636ab26b1423ca61ffd0fd758fd0a" target="_blank" rel="noopener">Sketchfab</a>), licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.sk" target="_blank" rel="noopener">CC BY 4.0</a>; upravené: odstránené logá, zmenená farba a materiály, zjednodušené. Garáž, zdvihák a kolesá: vlastná tvorba.</span>
-    </div>
-  </footer>
+    </footer>
 
-  <!-- Mobil: akcie vždy po ruke -->
-  <nav class="action-bar" id="action-bar" aria-label="Rýchle akcie">
-    <a href="tel:+421917973170"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Zavolať</a>
-    <a href="#objednavka" class="primary"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Objednať</a>
-    <a href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Navigovať</a>
-  </nav>
+    <!-- Mobil: akcie vždy po ruke -->
+    <nav class="action-bar" id="action-bar" aria-label="Rýchle akcie">
+      <a href="tel:+421917973170"
+        ><svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"
+          /></svg
+        >Zavolať</a
+      >
+      <a href="#objednavka" class="primary"
+        ><svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" /></svg
+        >Objednať</a
+      >
+      <a
+        href="https://www.google.com/maps/dir/?api=1&amp;destination=AUTO+MM+Servis%2C+Pasienkov%C3%A1+66%2C+821+06+Bratislava"
+        target="_blank"
+        rel="noopener"
+        ><svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 22s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z" />
+          <circle cx="12" cy="10" r="2.5" /></svg
+        >Navigovať</a
+      >
+    </nav>
 
-  <script src="data.js?v=17"></script>
-  <script type="module" src="app.js?v=17"></script>
-  <script src="consent.js?v=17" defer></script>
-  <script src="site.js?v=17" defer></script>
-</body>
+    <script src="data.js?v=20"></script>
+    <script type="module" src="app.js?v=20"></script>
+    <script src="consent.js?v=20" defer></script>
+    <script src="site.js?v=20" defer></script>
+  </body>
 </html>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /projekt2/admin.html
+
+Sitemap: https://richardlechman234-eng.github.io/projekt2/sitemap.xml

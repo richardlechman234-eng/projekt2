@@ -3,36 +3,59 @@
    (ukladá cookies spoločnosti Google). Voľba sa uloží do localStorage (nevyhnutné) na 12 mesiacov.
    Iné skripty: window.AutoMMConsent.maps (true/false) a udalosť „automm:consent“. */
 (function () {
-  'use strict';
-  const KEY = 'automm-consent';
+  "use strict";
+  const KEY = "automm-consent";
   const VERSION = 1;
-  const MAX_AGE = 365 * 24 * 3600 * 1000;      // po roku sa opýtame znova
+  const MAX_AGE = 365 * 24 * 3600 * 1000; // po roku sa opýtame znova
 
   function read() {
     try {
       const s = JSON.parse(localStorage.getItem(KEY));
       if (s && s.v === VERSION && Date.now() - s.ts < MAX_AGE) return s;
-    } catch (_) { /* súkromné okno / zablokované úložisko */ }
+    } catch (_) {
+      /* súkromné okno / zablokované úložisko */
+    }
     return null;
   }
   let state = read();
 
   window.AutoMMConsent = {
-    get decided() { return !!state; },
-    get maps() { return !!(state && state.maps); },
-    open: openSettings
+    get decided() {
+      return !!state;
+    },
+    get maps() {
+      return !!(state && state.maps);
+    },
+    open: openSettings,
   };
 
   function save(maps) {
     state = { v: VERSION, maps: !!maps, ts: Date.now() };
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* voľba platí aspoň do zatvorenia stránky */ }
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (_) {
+      /* voľba platí aspoň do zatvorenia stránky */
+    }
+    const hadFocus = banner && banner.contains(document.activeElement);
     banner?.remove();
     banner = null;
+    if (hadFocus) {
+      // fokus nesmie spadnúť na <body>: presunúť na hlavný obsah
+      const main = document.querySelector("main");
+      if (main) {
+        if (!main.hasAttribute("tabindex")) main.setAttribute("tabindex", "-1");
+        main.focus({ preventScroll: true });
+      }
+    }
     if (dlg?.open) dlg.close();
-    window.dispatchEvent(new CustomEvent('automm:consent', { detail: { maps: !!maps } }));
+    window.dispatchEvent(new CustomEvent("automm:consent", { detail: { maps: !!maps } }));
   }
 
-  const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
+  const el = (html) => {
+    const t = document.createElement("template");
+    t.innerHTML = html.trim();
+    return t.content.firstElementChild;
+  };
 
   /* ---------- lišta ---------- */
   let banner = null;
@@ -40,8 +63,7 @@
     banner = el(`
       <section class="cc" role="region" aria-label="Súhlas s cookies">
         <div class="cc-in">
-          <p><strong>Cookies a externý obsah.</strong> Používame len nevyhnutné úložisko v prehliadači (napr. zapamätanie tejto voľby).
-          S vaším súhlasom zobrazíme aj mapu Google, ktorá ukladá cookies spoločnosti Google.
+          <p><strong>Cookies a externý obsah.</strong> Len nevyhnutné úložisko; so súhlasom aj mapu Google (ukladá cookies Google).
           <a href="cookies.html">Viac o cookies</a></p>
           <div class="cc-btns">
             <button type="button" class="cc-btn" data-cc="all">Prijať všetko</button>
@@ -50,11 +72,11 @@
           </div>
         </div>
       </section>`);
-    banner.addEventListener('click', (e) => {
-      const a = e.target.closest('[data-cc]')?.dataset.cc;
-      if (a === 'all') save(true);
-      else if (a === 'none') save(false);
-      else if (a === 'settings') openSettings();
+    banner.addEventListener("click", (e) => {
+      const a = e.target.closest("[data-cc]")?.dataset.cc;
+      if (a === "all") save(true);
+      else if (a === "none") save(false);
+      else if (a === "settings") openSettings();
     });
     document.body.append(banner);
   }
@@ -85,23 +107,32 @@
             <p class="cc-more"><a href="cookies.html">Podrobnosti o cookies</a> · <a href="ochrana-osobnych-udajov.html">Ochrana osobných údajov</a></p>
           </form>
         </dialog>`);
-      dlg.addEventListener('click', (e) => {
-        if (e.target === dlg) { dlg.close(); return; }
-        const a = e.target.closest('[data-cc]')?.dataset.cc;
-        if (a === 'save') save(dlg.querySelector('[name=maps]').checked);
-        else if (a === 'all') save(true);
-        else if (a === 'none') save(false);
+      dlg.addEventListener("click", (e) => {
+        if (e.target === dlg) {
+          dlg.close();
+          return;
+        }
+        const a = e.target.closest("[data-cc]")?.dataset.cc;
+        if (a === "save") save(dlg.querySelector("[name=maps]").checked);
+        else if (a === "all") save(true);
+        else if (a === "none") save(false);
       });
       document.body.append(dlg);
     }
-    dlg.querySelector('[name=maps]').checked = !!(state && state.maps);   // nikdy nie predvyplnené bez súhlasu
+    dlg.querySelector("[name=maps]").checked = !!(state && state.maps); // nikdy nie predvyplnené bez súhlasu
     dlg.showModal();
   }
 
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-cookie-settings]')) { e.preventDefault(); openSettings(); }
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[data-cookie-settings]")) {
+      e.preventDefault();
+      openSettings();
+    }
   });
 
-  const start = () => { if (!state) showBanner(); };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  const start = () => {
+    if (!state) showBanner();
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();

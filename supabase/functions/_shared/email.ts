@@ -6,27 +6,40 @@
 //   ADMIN_URL      – (nepovinné) adresa admin panelu do upozornenia
 
 export const cors = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
 export const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json" },
+  });
 
 export const esc = (s: unknown) =>
-  String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+  String(s ?? "").replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 
-const DAYS = ['nedeľa', 'pondelok', 'utorok', 'streda', 'štvrtok', 'piatok', 'sobota'];
+const DAYS = ["nedeľa", "pondelok", "utorok", "streda", "štvrtok", "piatok", "sobota"];
 export function skDate(iso: string | null) {
-  if (!iso) return '';
-  const [y, m, d] = iso.split('-').map(Number);
+  if (!iso) return "";
+  const [y, m, d] = iso.split("-").map(Number);
   const day = DAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
   return `${day} ${d}. ${m}. ${y}`;
 }
 export function skTime(r: { cas_typ: string; cas: string | null }) {
-  if (r.cas_typ === 'konkretny' && r.cas) return `o ${r.cas.slice(0, 5)}`;
-  return ({ dopoludnia: 'dopoludnia', popoludni: 'popoludní', jedno: 'čas podľa dohody' } as Record<string, string>)[r.cas_typ] ?? '';
+  if (r.cas_typ === "konkretny" && r.cas) return `o ${r.cas.slice(0, 5)}`;
+  return (
+    (
+      { dopoludnia: "dopoludnia", popoludni: "popoludní", jedno: "čas podľa dohody" } as Record<
+        string,
+        string
+      >
+    )[r.cas_typ] ?? ""
+  );
 }
 
 // jednoduchá šablóna v štýle webu: tmavá hlavička, modrý pruh, biele telo
@@ -48,46 +61,90 @@ Tel. <a href="tel:+421917973170" style="color:#1441b5">0917 973 170</a>
 
 export function rows(pairs: [string, unknown][]) {
   return `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:8px 0 16px">${pairs
-    .filter(([, v]) => v !== null && v !== undefined && v !== '')
-    .map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#666;vertical-align:top;white-space:nowrap">${esc(k)}</td><td style="padding:6px 0;font-weight:600">${esc(v)}</td></tr>`)
-    .join('')}</table>`;
+    .filter(([, v]) => v !== null && v !== undefined && v !== "")
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 12px 6px 0;color:#666;vertical-align:top;white-space:nowrap">${esc(k)}</td><td style="padding:6px 0;font-weight:600">${esc(v)}</td></tr>`,
+    )
+    .join("")}</table>`;
 }
 
 function parseFrom(from: string) {
   const m = from.match(/^\s*(.*?)\s*<\s*([^>]+)\s*>\s*$/);
-  return m ? { name: m[1] || 'AUTO MM Servis', email: m[2] } : { name: 'AUTO MM Servis', email: from.trim() };
+  return m
+    ? { name: m[1] || "AUTO MM Servis", email: m[2] }
+    : { name: "AUTO MM Servis", email: from.trim() };
 }
 
 export type Attachment = { name: string; contentBase64: string };
-export async function sendEmail(o: { to: string; subject: string; html: string; replyTo?: string; attachments?: Attachment[] }) {
-  const fromRaw = Deno.env.get('EMAIL_FROM');
-  if (!fromRaw) throw new Error('Chýba nastavenie EMAIL_FROM');
+export async function sendEmail(o: {
+  to: string;
+  subject: string;
+  html: string;
+  replyTo?: string;
+  attachments?: Attachment[];
+}) {
+  const fromRaw = Deno.env.get("EMAIL_FROM");
+  if (!fromRaw) throw new Error("Chýba nastavenie EMAIL_FROM");
   const from = parseFrom(fromRaw);
-  const brevo = Deno.env.get('BREVO_API_KEY');
-  const resend = Deno.env.get('RESEND_API_KEY');
-  let res: Response;
-  if (brevo) {
-    res = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: { 'api-key': brevo, 'Content-Type': 'application/json', accept: 'application/json' },
+  const brevo = Deno.env.get("BREVO_API_KEY");
+  const resend = Deno.env.get("RESEND_API_KEY");
+  if (!brevo && !resend) throw new Error("Chýba BREVO_API_KEY alebo RESEND_API_KEY");
+
+  const send = (replyTo?: string) => {
+    const signal = AbortSignal.timeout(10_000); // visiaca služba nesmie zablokovať funkciu
+    if (brevo) {
+      return fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        signal,
+        headers: {
+          "api-key": brevo,
+          "Content-Type": "application/json",
+          accept: "application/json",
+        },
+        body: JSON.stringify({
+          sender: from,
+          to: [{ email: o.to }],
+          subject: o.subject,
+          htmlContent: o.html,
+          ...(replyTo ? { replyTo: { email: replyTo } } : {}),
+          ...(o.attachments?.length
+            ? { attachment: o.attachments.map((a) => ({ name: a.name, content: a.contentBase64 })) }
+            : {}),
+        }),
+      });
+    }
+    return fetch("https://api.resend.com/emails", {
+      method: "POST",
+      signal,
+      headers: { Authorization: `Bearer ${resend}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        sender: from, to: [{ email: o.to }], subject: o.subject, htmlContent: o.html,
-        ...(o.replyTo ? { replyTo: { email: o.replyTo } } : {}),
-        ...(o.attachments?.length ? { attachment: o.attachments.map((a) => ({ name: a.name, content: a.contentBase64 })) } : {}),
+        from: `${from.name} <${from.email}>`,
+        to: [o.to],
+        subject: o.subject,
+        html: o.html,
+        ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(o.attachments?.length
+          ? {
+              attachments: o.attachments.map((a) => ({
+                filename: a.name,
+                content: a.contentBase64,
+              })),
+            }
+          : {}),
       }),
     });
-  } else if (resend) {
-    res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${resend}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: `${from.name} <${from.email}>`, to: [o.to], subject: o.subject, html: o.html,
-        ...(o.replyTo ? { reply_to: o.replyTo } : {}),
-        ...(o.attachments?.length ? { attachments: o.attachments.map((a) => ({ filename: a.name, content: a.contentBase64 })) } : {}),
-      }),
-    });
-  } else {
-    throw new Error('Chýba BREVO_API_KEY alebo RESEND_API_KEY');
+  };
+
+  let res = await send(o.replyTo);
+  if (res.status === 400 && o.replyTo) {
+    // služba odmietla (napr. zlý Reply-To) – skúsime ešte raz bez neho, nech e-mail aspoň príde
+    console.error("sendEmail: 400, opakujem bez replyTo:", (await res.text()).slice(0, 300));
+    res = await send(undefined);
   }
-  if (!res.ok) throw new Error(`E-mailová služba vrátila ${res.status}: ${await res.text()}`);
+  if (!res.ok) {
+    // detail len do logov, volajúcemu ide iba stavový kód
+    console.error(`sendEmail: ${res.status}:`, (await res.text()).slice(0, 300));
+    throw new Error(`E-mailová služba vrátila ${res.status}`);
+  }
 }

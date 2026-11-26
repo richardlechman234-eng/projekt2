@@ -8,3 +8,14 @@ supabase-token.txt
 .env
 .env.*
 supabase/.temp/
+
+# Nástroje (npm, testy, reporty)
+node_modules/
+test-results/
+playwright-report/
+*.log
+
+# Interné reporty a plány (len lokálne, repozitár je verejný)
+docs/
+qa/
+deno.lock

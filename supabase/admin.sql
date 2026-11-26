@@ -2,6 +2,7 @@
 --  AUTO MM Servis – doplnok pre admin panel a e-maily
 --  Spustite AŽ PO rezervacie.sql: SQL Editor → New query → vložiť celé → Run.
 --  Dá sa spustiť aj opakovane.
+--  POZOR: trigger z časti 3 je od 2026-11-26 nahradený verziou v opravy-2026-11-26.sql (spustiť po tomto súbore).
 -- =====================================================================
 
 -- 1) Nové stĺpce ------------------------------------------------------------
