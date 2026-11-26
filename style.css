@@ -103,7 +103,7 @@ h3 {
   min-height: 44px;
   padding: 0 20px;
   border-radius: 10px;
-  font: 600 15px/1 var(--font);
+  font: 600 0.9375rem/1 var(--font);
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
@@ -185,13 +185,13 @@ h3 {
   visibility: visible;
 }
 #brand-text {
-  font: 700 20px/1 var(--display);
+  font: 700 1.25rem/1 var(--display);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
 @media (max-width: 380px) {
   #brand-text {
-    font-size: 17px;
+    font-size: 1.0625rem;
   }
 }
 #hero-title {
@@ -236,7 +236,7 @@ h3 {
   gap: 14px;
 }
 .contact-pop dt {
-  font-size: 12px;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -244,7 +244,7 @@ h3 {
 }
 .contact-pop dd {
   margin: 2px 0 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .contact-pop dd a {
   font-weight: 600;
@@ -261,7 +261,7 @@ h3 {
 .maps-hint {
   display: block;
   margin-top: 2px;
-  font-size: 12px;
+  font-size: 0.8125rem;
   color: rgba(255, 255, 255, 0.8);
 }
 .pop-actions {
@@ -314,7 +314,7 @@ h3 {
   gap: 10px;
   justify-items: center;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
   transition: opacity 0.4s;
 }
 .loader-bar {
@@ -348,7 +348,7 @@ h3 {
   pointer-events: none;
 }
 .intro h1 {
-  font-size: clamp(46px, 11vw, 168px);
+  font-size: clamp(2.875rem, 11vw, 10.5rem);
   font-weight: 700;
   color: var(--white);
   text-shadow:
@@ -369,16 +369,16 @@ h3 {
 }
 @media (max-width: 480px) {
   .intro .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
   }
   .intro .rating {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 }
 .eyebrow {
   margin: 0 0 16px;
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -387,7 +387,7 @@ h3 {
 .rating {
   margin: 20px 0 0;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: var(--white);
 }
 .scroll-hint {
@@ -402,7 +402,7 @@ h3 {
   border: 0;
   cursor: pointer;
   pointer-events: auto;
-  font: 600 12px var(--font);
+  font: 600 0.8125rem var(--font);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--white);
@@ -465,7 +465,7 @@ h3 {
   background: rgba(10, 2, 2, 0.9);
   color: var(--white);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  font: 600 14px var(--font);
+  font: 600 0.875rem var(--font);
   cursor: pointer;
   white-space: nowrap;
   transition:
@@ -556,7 +556,7 @@ h3 {
   visibility: hidden;
 }
 .services-ui h2 {
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
 }
 .services-ui p {
   margin: 6px 0 14px;
@@ -578,7 +578,7 @@ h3 {
   background: rgba(20, 65, 181, 0.22);
   color: var(--white);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  font: 500 14px var(--font);
+  font: 500 0.875rem var(--font);
 }
 .chip:hover,
 .chip[aria-pressed="true"] {
@@ -661,14 +661,14 @@ h3 {
 }
 .panel-kicker {
   margin: 0 0 6px;
-  font-size: 12px;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
 }
 .service-panel h3 {
-  font-size: 34px;
+  font-size: 2.125rem;
   margin-bottom: 12px;
   padding-right: 52px;
 }
@@ -710,7 +710,7 @@ h3 {
   color: rgba(255, 255, 255, 0.8);
 }
 .panel-price strong {
-  font: 700 22px var(--display);
+  font: 700 1.375rem var(--display);
   text-align: right;
 }
 
@@ -724,7 +724,7 @@ h3 {
   text-align: center;
 }
 .fallback h2 {
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
 }
 .fallback p {
   margin: 6px 0 14px;
@@ -786,14 +786,14 @@ body.no3d .brand {
   min-width: 0;
 }
 .section h2 {
-  font-size: clamp(34px, 5vw, 56px);
+  font-size: clamp(2.125rem, 5vw, 3.5rem);
   margin-bottom: 20px;
 }
 .section .eyebrow {
   color: rgba(255, 255, 255, 0.8);
 }
 .lead {
-  font-size: 18px;
+  font-size: 1.125rem;
   color: rgba(255, 255, 255, 0.88);
   margin: 0 0 20px;
 }
@@ -839,10 +839,10 @@ body.no3d .brand {
   display: grid;
   justify-items: end;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .rating-big strong {
-  font: 700 48px/1 var(--display);
+  font: 700 3rem/1 var(--display);
   color: var(--white);
 }
 .rating-big .stars {
@@ -878,7 +878,7 @@ body.no3d .brand {
 }
 .review figcaption {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
@@ -888,7 +888,7 @@ body.no3d .brand {
   background: var(--dark);
   border-top: 1px solid var(--line);
   padding: 28px 0;
-  font-size: 13px;
+  font-size: 0.875rem;
   color: var(--muted);
 }
 .footer-row {
@@ -957,7 +957,7 @@ section[id] {
 .btn-lg {
   min-height: 52px;
   padding: 0 28px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .open-status {
@@ -965,7 +965,7 @@ section[id] {
   align-items: center;
   gap: 8px;
   margin: 0 0 14px;
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 999px;
@@ -1007,10 +1007,10 @@ section[id] {
   border-left: 0;
 }
 .trust-item strong {
-  font: 700 24px/1.2 var(--display);
+  font: 700 1.5rem/1.2 var(--display);
 }
 .trust-item span {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.85);
 }
 @media (max-width: 860px) {
@@ -1027,7 +1027,7 @@ section[id] {
     padding: 20px 16px;
   }
   .trust-item strong {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 }
 
@@ -1057,16 +1057,16 @@ section[id] {
   align-content: start;
 }
 .step-num {
-  font: 700 44px/1 var(--display);
+  font: 700 2.75rem/1 var(--display);
   color: #5b86f0;
 }
 .steps h3 {
-  font-size: 22px;
+  font-size: 1.375rem;
 }
 .steps p {
   margin: 0;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 @media (max-width: 960px) {
   .steps {
@@ -1084,7 +1084,7 @@ section[id] {
   margin: 0;
   max-width: 420px;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .price-table {
   border: 1px solid var(--line);
@@ -1102,7 +1102,7 @@ section[id] {
 .price-head {
   border-top: 0;
   background: var(--blue);
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1110,11 +1110,11 @@ section[id] {
   padding-bottom: 14px;
 }
 .p-name {
-  font: 700 18px var(--display);
+  font: 700 1.125rem var(--display);
 }
 .p-items {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .p-price {
   display: flex;
@@ -1133,7 +1133,7 @@ section[id] {
   background: var(--blue);
   color: var(--white);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .p-book:hover {
   background: var(--blue-2);
@@ -1187,7 +1187,7 @@ section[id] {
   padding: 20px 40px 20px 0;
   position: relative;
   font-weight: 600;
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 .faq summary::-webkit-details-marker {
   display: none;
@@ -1204,7 +1204,7 @@ section[id] {
   background: var(--blue);
   display: grid;
   place-items: center;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 28px;
   text-align: center;
 }
@@ -1239,7 +1239,7 @@ section[id] {
 .booking label {
   display: grid;
   gap: 6px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 .booking input,
@@ -1252,7 +1252,7 @@ section[id] {
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: var(--blue-deep);
   color: var(--white);
-  font: 400 16px var(--font);
+  font: 400 1rem var(--font);
 }
 .booking textarea {
   resize: vertical;
@@ -1290,7 +1290,7 @@ section[id] {
 }
 .form-legal {
   margin: 0;
-  font-size: 13px;
+  font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.8);
 }
 .form-error {
@@ -1322,7 +1322,7 @@ section[id] {
   gap: 12px;
 }
 .booking-done h3 {
-  font-size: 26px;
+  font-size: 1.625rem;
 }
 .booking-done p {
   margin: 0;
@@ -1333,7 +1333,7 @@ section[id] {
   border-radius: 10px;
   background: var(--dark);
   white-space: pre-wrap;
-  font: 400 14px/1.55 var(--font);
+  font: 400 0.875rem/1.55 var(--font);
   color: var(--white);
 }
 
@@ -1345,7 +1345,7 @@ section[id] {
   gap: 16px;
 }
 .contact-card h3 {
-  font-size: 26px;
+  font-size: 1.625rem;
 }
 .contact-card dl {
   margin: 0;
@@ -1353,7 +1353,7 @@ section[id] {
   gap: 14px;
 }
 .contact-card dt {
-  font-size: 12px;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1379,7 +1379,7 @@ section[id] {
   padding: 20px;
   text-align: center;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .map-consent p {
   margin: 0;
@@ -1417,7 +1417,7 @@ section[id] {
   line-height: 1.7;
 }
 .footer-name {
-  font: 700 18px var(--display);
+  font: 700 1.125rem var(--display);
 }
 @media (max-width: 760px) {
   .footer-grid {
@@ -1466,7 +1466,7 @@ section[id] {
     min-height: 60px;
     color: var(--white);
     text-decoration: none;
-    font-size: 12px;
+    font-size: 0.8125rem;
     font-weight: 600;
   }
   .action-bar a.primary {
@@ -1503,7 +1503,7 @@ section[id] {
     padding-bottom: 0;
   }
   .service-panel h3 {
-    font-size: 28px;
+    font-size: 1.75rem;
     margin-bottom: 8px;
   }
   .service-panel > p {
@@ -1573,7 +1573,7 @@ section[id] {
   background: var(--dark-2);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.55;
 }
 .cc-in p {
@@ -1594,7 +1594,7 @@ section[id] {
   padding: 0 10px;
   border-radius: 10px;
   cursor: pointer;
-  font: 600 15px var(--font);
+  font: 600 0.9375rem var(--font);
   background: var(--blue);
   color: var(--white);
   border: 1px solid var(--blue);
@@ -1619,7 +1619,7 @@ section[id] {
     gap: 8px;
     padding: 10px 12px;
     border-radius: 14px;
-    font-size: 13px;
+    font-size: 0.875rem;
     line-height: 1.4;
   }
   .cc-btns {
@@ -1628,7 +1628,7 @@ section[id] {
   .cc-btn {
     min-height: 44px;
     padding: 0 4px;
-    font-size: 13px;
+    font-size: 0.875rem;
   }
 }
 .cc-dlg {
@@ -1650,12 +1650,12 @@ section[id] {
   padding: 22px 18px;
 }
 .cc-dlg h2 {
-  font-size: 26px;
+  font-size: 1.625rem;
 }
 .cc-dlg p {
   margin: 0;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .cc-cat {
   display: grid;
@@ -1698,4 +1698,24 @@ section[id] {
 }
 #obsah:focus {
   outline: none;
+}
+
+/* Larger tap area for inline text links (HIG min 44x44 pt) without changing layout */
+.form-legal a,
+.contact-card dd a,
+.contact-pop dd a,
+.footer a,
+.cc a,
+.cc-dlg a {
+  position: relative;
+}
+.form-legal a::after,
+.contact-card dd a::after,
+.contact-pop dd a::after,
+.footer a::after,
+.cc a::after,
+.cc-dlg a::after {
+  content: "";
+  position: absolute;
+  inset: -14px -6px;
 }
