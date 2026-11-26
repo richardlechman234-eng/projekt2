@@ -1689,3 +1689,13 @@ section[id] {
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* odkazy v riadku s autorstvom 3D modelu: aspoň 24 px cieľ na dotyk (WCAG 2.5.8) */
+.footer .credit a {
+  display: inline-block;
+  min-height: 24px;
+  padding: 4px 0;
+}
+#obsah:focus {
+  outline: none;
+}

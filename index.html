@@ -3,7 +3,7 @@
   <head>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-y94z5V04bErnbVl00IeevgEgQQ/N9Mvan05craZrDtA='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob: https://erjopcachzansloyywas.supabase.co; frame-src https://maps.google.com https://www.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-uoNkX1es0jiMTIpRZ8Zq+DbUI0iTa7RGISB56bmJ/qM='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob: https://erjopcachzansloyywas.supabase.co; frame-src https://maps.google.com https://www.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta charset="utf-8" />
@@ -68,13 +68,13 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="style.css?v=20" />
-    <link rel="modulepreload" href="vendor/three/three.module.min.js?v=20" />
-    <link rel="preload" href="assets/car.glb?v=20" as="fetch" crossorigin />
+    <link rel="stylesheet" href="style.css?v=21" />
+    <link rel="modulepreload" href="vendor/three/three.module.min.js?v=21" />
+    <link rel="preload" href="assets/car.glb?v=21" as="fetch" crossorigin />
     <script type="importmap">
       {
         "imports": {
-          "three": "./vendor/three/three.module.min.js?v=20",
+          "three": "./vendor/three/three.module.min.js?v=21",
           "three/addons/": "./vendor/three/addons/"
         }
       }
@@ -251,10 +251,8 @@
         </div>
       </section>
 
-      <div id="obsah" tabindex="-1"></div>
-
       <!-- Pás dôvery hneď pod úvodom -->
-      <section class="trust" aria-label="Prečo AUTO MM Servis">
+      <section class="trust" id="obsah" tabindex="-1" aria-label="Prečo AUTO MM Servis">
         <div class="wrap trust-row">
           <!-- TODO(owner): confirm 4,6 / 20 -->
           <div class="trust-item">
@@ -703,9 +701,9 @@
       >
     </nav>
 
-    <script src="data.js?v=20"></script>
-    <script type="module" src="app.js?v=20"></script>
-    <script src="consent.js?v=20" defer></script>
-    <script src="site.js?v=20" defer></script>
+    <script src="data.js?v=21"></script>
+    <script type="module" src="app.js?v=21"></script>
+    <script src="consent.js?v=21" defer></script>
+    <script src="site.js?v=21" defer></script>
   </body>
 </html>
